@@ -32,7 +32,4 @@ public class Payments {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @ManyToOne
-    @JoinColumn(name = "doctor_id",nullable = false)
-    private Doctors doctors;
 }

@@ -23,13 +23,5 @@ public class Reviews {
     @CreationTimestamp
     private LocalDateTime created_at;
 
-    @ManyToOne
-    @JoinColumn(name = "patient_id",nullable = false)
-    private Patients patients;
-
-    @ManyToOne
-    @JoinColumn(name = "doctor_id",nullable = false)
-    private Doctors doctors;
-
 
 }

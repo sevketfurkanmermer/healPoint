@@ -18,7 +18,7 @@ import java.util.List;
 public class Patients {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long Patient_id;
 
     @Column(unique = true, nullable = false,length = 11)
     private String Patient_tc;
@@ -42,10 +42,10 @@ public class Patients {
     @ManyToMany(mappedBy = "patients")
     private List<Doctors> doctors;
 
-    @OneToMany(mappedBy = "patients",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Appointments> appointments;
 
-    @OneToMany(mappedBy = "patients", cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Reviews> reviews;
 
 
