@@ -7,4 +7,8 @@ import org.springframework.http.ResponseEntity;
 public interface IPatientController {
 
     public ResponseEntity<String> createPatient(DtoPatientIU dtoPatientIU);
+
+    public ResponseEntity<String> updatePatient(String Patient_tc,DtoPatientIU dtoPatientIU);
+
+    public DtoPatient getPatient(String Patient_tc);
 }

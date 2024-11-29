@@ -16,11 +16,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Patients {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Patient_id;
 
-    @Column(unique = true, nullable = false,length = 11)
+    @Id
+    @Column(nullable = false,length = 11)
     private String Patient_tc;
     @Column(nullable = false)
     private String Patient_name;

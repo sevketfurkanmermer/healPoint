@@ -6,11 +6,9 @@ import com.proje.healpoint.dto.DtoPatient;
 import com.proje.healpoint.dto.DtoPatientIU;
 import com.proje.healpoint.service.IPatientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path="/api/patients")
@@ -23,5 +21,22 @@ public class PatientControllerImpl implements IPatientController {
     public ResponseEntity<String> createPatient(@RequestBody DtoPatientIU dtoPatientIU) {
         String response = patientService.createPatient(dtoPatientIU);
         return ResponseEntity.ok(response);
+    }
+
+    @PutMapping(path="/update/{Patient_tc}")
+    @Override
+    public ResponseEntity<String> updatePatient(@PathVariable(name = "Patient_tc")String Patient_tc, @RequestBody DtoPatientIU dtoPatientIU) {
+        String response = patientService.updatePatient(Patient_tc, dtoPatientIU);
+        if (response.equals("KAYIT GÜNCELLENDİ")){
+            return ResponseEntity.ok(response);
+        }else {return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);}
+
+    }
+
+    @GetMapping(path="/list/{Patient_tc}")
+    @Override
+    public DtoPatient getPatient(@PathVariable(name = "Patient_tc") String Patient_tc) {
+        return patientService.getPatientById(Patient_tc);
+
     }
 }

@@ -19,11 +19,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Doctors {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Doctor_id;
 
-    @Column(length = 11,unique = true, nullable = false)
+    @Id
+    @Column(length = 11, nullable = false)
     private String Doctor_tc;
     @Column(nullable = false)
     private String Doctor_name;
@@ -48,8 +46,8 @@ public class Doctors {
 
     @ManyToMany
     @JoinTable(name="Doctor_patient",
-            joinColumns = @JoinColumn(name="doctor_id"),
-            inverseJoinColumns = @JoinColumn(name="patient_id"))
+            joinColumns = @JoinColumn(name="doctor_tc"),
+            inverseJoinColumns = @JoinColumn(name="patient_tc"))
     private List<Patients> patients;
 
     @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)

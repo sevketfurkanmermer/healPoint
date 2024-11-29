@@ -7,5 +7,8 @@ public interface IPatientService {
 
     public String createPatient(DtoPatientIU dtoPatientIU);
 
+    public  String updatePatient(String Patient_tc,DtoPatientIU dtoPatientIU);
+
+    public DtoPatient getPatientById(String Patient_tc);
 
 }

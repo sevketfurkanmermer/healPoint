@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DtoPatientIU {
-    private Long Patient_id;
+
     private String Patient_tc;
     private String Patient_name;
     private String Patient_surname;
