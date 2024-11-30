@@ -25,6 +25,9 @@ public class Appointments {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date Appointment_date;
 
+    @Column(nullable = false)
+    private String appointment_time;
+
     @Enumerated(EnumType.STRING)
     private AppointmentStatus Appointment_status;
 
@@ -34,6 +37,14 @@ public class Appointments {
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "patient_tc", nullable = false)
+    private Patients patient;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "doctor_id", nullable = false)
+    private Doctors doctor;
 
 
 

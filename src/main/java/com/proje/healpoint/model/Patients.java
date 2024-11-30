@@ -41,9 +41,6 @@ public class Patients {
     private List<Doctors> doctors;
 
     @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Appointments> appointments;
-
-    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Reviews> reviews;
 
 

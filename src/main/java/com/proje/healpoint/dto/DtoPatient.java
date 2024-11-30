@@ -1,5 +1,7 @@
 package com.proje.healpoint.dto;
 
+import com.proje.healpoint.model.Appointments;
+import com.proje.healpoint.model.Doctors;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +19,10 @@ public class DtoPatient {
     private String Patient_gender;
     private String Patient_phonenumber;
     private String Patient_email;
+
+    private List<Doctors> doctors;
+
+    private List<Appointments> appointments;
 
     private List<DtoReview> reviews;
 }

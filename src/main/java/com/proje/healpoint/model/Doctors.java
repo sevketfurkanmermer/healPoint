@@ -50,8 +50,6 @@ public class Doctors {
             inverseJoinColumns = @JoinColumn(name="patient_tc"))
     private List<Patients> patients;
 
-    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Appointments> appointments;
 
     @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Payments> payments;
