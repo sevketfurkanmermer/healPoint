@@ -25,5 +25,5 @@ public class DtoPatient {
     private List<DtoAppointment> appointments = new ArrayList<>();
 
 
-    private List<DtoReview> reviews;
+    //private List<DtoReview> reviews;
 }

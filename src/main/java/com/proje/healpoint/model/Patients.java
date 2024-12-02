@@ -40,11 +40,11 @@ public class Patients {
     @ManyToMany(mappedBy = "patients")
     private List<Doctors> doctors;
 
-    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Reviews> reviews;
-
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Appointments> appointments;
+
+    //@OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
+    //private List<Reviews> reviews ;
 
 
 }

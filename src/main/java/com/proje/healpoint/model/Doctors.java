@@ -52,13 +52,9 @@ public class Doctors {
             inverseJoinColumns = @JoinColumn(name="patient_tc"))
     private List<Patients> patients;
 
-
     @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Payments> payments;
 
     @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Reviews> reviews;
-
-
-
 }

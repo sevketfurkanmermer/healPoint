@@ -1,9 +1,6 @@
 package com.proje.healpoint.service.impl;
 
-import com.proje.healpoint.dto.DtoAppointment;
-import com.proje.healpoint.dto.DtoDoctor;
-import com.proje.healpoint.dto.DtoPatient;
-import com.proje.healpoint.dto.DtoPatientIU;
+import com.proje.healpoint.dto.*;
 import com.proje.healpoint.exception.BaseException;
 import com.proje.healpoint.exception.ErrorMessage;
 import com.proje.healpoint.exception.MessageType;
@@ -100,9 +97,9 @@ public class PatientServiceImpl implements IPatientService {
                     dtoAppointment.setAppointment_status(appointment.getAppointment_status());
                     dtoAppointment.setAppointment_text(appointment.getAppointment_text());
                     dtoAppointment.setPatientTc(dtoPatient.getPatientTc());
-                    DtoDoctor dtoDoctor = new DtoDoctor();
-                    BeanUtils.copyProperties(appointment.getDoctor(), dtoDoctor);
-                    dtoAppointment.setDoctor(dtoDoctor);
+                    DtoDoctorReview dtoDoctorReview = new DtoDoctorReview();
+                    BeanUtils.copyProperties(appointment.getDoctor(), dtoDoctorReview);
+                    dtoAppointment.setDoctor(dtoDoctorReview);
                     dtoAppointments.add(dtoAppointment);
 
                 }
