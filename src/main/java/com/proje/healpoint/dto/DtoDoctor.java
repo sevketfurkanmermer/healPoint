@@ -14,13 +14,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class DtoDoctor {
 
-    private String Doctor_tc;
     private String Doctor_name;
     private String Doctor_surname;
-    private String Doctor_phonenumber;
+    private String branch;
     private String Doctor_email;
     private String city;
     private String district;
-    private String address;
+
 
 }

@@ -19,17 +19,17 @@ public class Patients {
 
     @Id
     @Column(nullable = false,length = 11)
-    private String Patient_tc;
+    private String patientTc;
     @Column(nullable = false)
     private String Patient_name;
     @Column(nullable = false)
     private String Patient_surname;
 
     private String Patient_gender;
-    @Column(nullable = false)
-    private String Patient_phonenumber;
     @Column(nullable = false,unique = true)
-    private String Patient_email;
+    private String patientPhonenumber;
+    @Column(nullable = false,unique = true)
+    private String patientEmail;
     @Column(nullable = false)
     private String Patient_password;
     @CreationTimestamp
@@ -42,6 +42,9 @@ public class Patients {
 
     @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Reviews> reviews;
+
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Appointments> appointments;
 
 
 }

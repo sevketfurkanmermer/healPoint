@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DtoPatientIU {
 
-    private String Patient_tc;
+    private String patientTc;
     private String Patient_name;
     private String Patient_surname;
     private String Patient_gender;
-    private String Patient_phonenumber;
-    private String Patient_email;
+    private String patientPhonenumber;
+    private String patientEmail;
     private String Patient_password;
 
 }

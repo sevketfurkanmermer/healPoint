@@ -18,6 +18,7 @@ public class DtoDoctorIU {
     private String Doctor_surname;
     private String Doctor_phonenumber;
     private String Doctor_password;
+    private String branch;
     private String Doctor_email;
     private String city;
     private String district;

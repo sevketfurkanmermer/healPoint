@@ -26,6 +26,8 @@ public class Doctors {
     @Column(nullable = false)
     private String Doctor_name;
     @Column(nullable = false)
+    private String branch;
+    @Column(nullable = false)
     private String Doctor_surname;
     @Column(nullable = false)
     private String Doctor_phonenumber;

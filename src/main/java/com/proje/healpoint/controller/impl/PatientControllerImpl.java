@@ -20,19 +20,15 @@ public class PatientControllerImpl implements IPatientController {
     @Override
     public ResponseEntity<String> createPatient(@RequestBody DtoPatientIU dtoPatientIU) {
         String response = patientService.createPatient(dtoPatientIU);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping(path="/update/{Patient_tc}")
     @Override
     public ResponseEntity<String> updatePatient(@PathVariable(name = "Patient_tc")String Patient_tc, @RequestBody DtoPatientIU dtoPatientIU) {
         String response = patientService.updatePatient(Patient_tc, dtoPatientIU);
-        if (response.equals("KAYIT GÜNCELLENDİ")){
             return ResponseEntity.ok(response);
-        }else {return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);}
-
     }
-
     @GetMapping(path="/list/{Patient_tc}")
     @Override
     public DtoPatient getPatient(@PathVariable(name = "Patient_tc") String Patient_tc) {

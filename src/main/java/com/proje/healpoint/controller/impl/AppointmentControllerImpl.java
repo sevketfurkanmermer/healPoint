@@ -20,7 +20,6 @@ public class AppointmentControllerImpl implements IAppointmentController {
     @PostMapping(path = "/create")
     @Override
     public ResponseEntity<String> createAppointment(@RequestBody DtoAppointment dtoAppointment) {
-        System.out.println(dtoAppointment);
         String response = appointmentService.createAppointment(dtoAppointment);
         return ResponseEntity.ok(response);
     }
