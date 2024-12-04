@@ -11,6 +11,7 @@ import com.proje.healpoint.repository.PatientRepository;
 import com.proje.healpoint.service.IPatientService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -25,6 +26,8 @@ public class PatientServiceImpl implements IPatientService {
     private PatientRepository patientRepository;
     @Autowired
     private AppointmentRepository appointmentRepository;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public String createPatient(DtoPatientIU dtoPatientIU) {
@@ -48,7 +51,14 @@ public class PatientServiceImpl implements IPatientService {
             throw new BaseException(new ErrorMessage(MessageType.RECORD_ALREADY_EXIST, errorMessage.toString()));
         }
         Patients patients = new Patients();
-        BeanUtils.copyProperties(dtoPatientIU, patients);
+        patients.setPatientTc(dtoPatientIU.getPatientTc());
+        patients.setPatientEmail(dtoPatientIU.getPatientEmail());
+        patients.setPatientPhonenumber(dtoPatientIU.getPatientPhonenumber());
+        patients.setPatient_surname(dtoPatientIU.getPatient_surname());
+        patients.setPatient_name(dtoPatientIU.getPatient_name());
+        patients.setPatient_gender(dtoPatientIU.getPatient_gender());
+        String encodedPassword=passwordEncoder.encode(dtoPatientIU.getPatient_password());
+        patients.setPatient_password(encodedPassword);
         patientRepository.save(patients);
         return "KAYIT OLUŞTURULDU";
     }
@@ -110,3 +120,7 @@ public class PatientServiceImpl implements IPatientService {
             }
         }
     }
+
+
+
+
