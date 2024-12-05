@@ -31,11 +31,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             authHeader = authHeader.substring(7);
+            System.out.println("Token from header: " + authHeader);
             if (jwtService.isTokenValid(authHeader)) {
                 String patientTc=jwtService.extractPatientTc(authHeader);
+                System.out.println("Extracted patientTc: " + patientTc); // Subject (T.C.)'yi yazdır
+
                 SecurityContextHolder.getContext().setAuthentication(
                         new UsernamePasswordAuthenticationToken(patientTc, null, Collections.emptyList()));
-
             }
 
         }

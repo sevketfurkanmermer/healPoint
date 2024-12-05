@@ -20,7 +20,7 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    private static final String AUTHENTICATE = "/";
+    private static final String AUTHENTICATE = "/authenticate";
     private static final String REGISTER = "/api/patients/create";
 
     @Bean

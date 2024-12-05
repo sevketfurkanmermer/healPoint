@@ -8,7 +8,7 @@ public interface IPatientController {
 
     public ResponseEntity<String> createPatient(DtoPatientIU dtoPatientIU);
 
-    public ResponseEntity<String> updatePatient(String Patient_tc,DtoPatientIU dtoPatientIU);
+    public ResponseEntity<String> updatePatient(DtoPatientIU dtoPatientIU);
 
     public DtoPatient getPatient(String Patient_tc);
 }

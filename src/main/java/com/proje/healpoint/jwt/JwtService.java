@@ -1,20 +1,20 @@
 package com.proje.healpoint.jwt;
 
 import com.proje.healpoint.model.Patients;
-import io.jsonwebtoken.Jwt;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
 import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.security.Key;
+import java.util.Base64;
 import java.util.Date;
 
 @Component
 public class JwtService {
 
-    private final String SECRET_KEY="";
+    private final String SECRET_KEY="BkHrpdinMVpyGgBlPTMDfO7Tv5PRZQb6URKfdyHN1zA";
 
     public String generateToken(String patientTc) {
         return Jwts.builder()
@@ -27,11 +27,12 @@ public class JwtService {
     }
 
     public String extractPatientTc(String token) {
-        return Jwts.parser()
+        Claims claims = Jwts.parser()
                 .setSigningKey(SECRET_KEY)
                 .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+                .getBody();
+
+        return claims.getSubject();
     }
 
     public boolean isTokenValid(String token) {

@@ -4,6 +4,7 @@ import com.proje.healpoint.dto.*;
 import com.proje.healpoint.exception.BaseException;
 import com.proje.healpoint.exception.ErrorMessage;
 import com.proje.healpoint.exception.MessageType;
+import com.proje.healpoint.jwt.JwtService;
 import com.proje.healpoint.model.Appointments;
 import com.proje.healpoint.model.Patients;
 import com.proje.healpoint.repository.AppointmentRepository;
@@ -11,6 +12,7 @@ import com.proje.healpoint.repository.PatientRepository;
 import com.proje.healpoint.service.IPatientService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +30,8 @@ public class PatientServiceImpl implements IPatientService {
     private AppointmentRepository appointmentRepository;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private JwtService jwtService;
 
     @Override
     public String createPatient(DtoPatientIU dtoPatientIU) {
@@ -38,7 +42,7 @@ public class PatientServiceImpl implements IPatientService {
         );
         if (existingPatient.isPresent()) {
             Patients patient = existingPatient.get();
-            StringBuilder errorMessage = new StringBuilder();
+              StringBuilder errorMessage = new StringBuilder();
             if (patient.getPatientTc().equals(dtoPatientIU.getPatientTc())) {
                 errorMessage.append("[TC: ").append(dtoPatientIU.getPatientTc()).append("] ");
             }
@@ -63,16 +67,23 @@ public class PatientServiceImpl implements IPatientService {
         return "KAYIT OLUŞTURULDU";
     }
     @Override
-    public String updatePatient(String Patient_tc,DtoPatientIU dtoPatientIU) {
-        List<String> errorMessages = new ArrayList<>();
-        Optional<Patients> optional = patientRepository.findById(Patient_tc);
-        if (optional.isEmpty()) {
-            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, Patient_tc));
+    public String updatePatient(DtoPatientIU dtoPatientIU) {
+
+        String patientTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        System.out.println("PatientTc in service: " + patientTc);
+
+
+        Optional<Patients> optional = patientRepository.findById(patientTc);
+         if (optional.isEmpty()) {
+            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, patientTc));
         }
-        if (patientRepository.existsByPatientEmailAndPatientTcNot(dtoPatientIU.getPatientEmail(), Patient_tc)) {
+
+        List<String> errorMessages = new ArrayList<>();
+
+        if (patientRepository.existsByPatientEmailAndPatientTcNot(dtoPatientIU.getPatientEmail(), patientTc)) {
             errorMessages.add("Email: " + dtoPatientIU.getPatientEmail());
         }
-        if (patientRepository.existsByPatientPhonenumberAndPatientTcNot(dtoPatientIU.getPatientPhonenumber(), Patient_tc)) {
+        if (patientRepository.existsByPatientPhonenumberAndPatientTcNot(dtoPatientIU.getPatientPhonenumber(), patientTc)) {
             errorMessages.add("Telefon: " + dtoPatientIU.getPatientPhonenumber());
         }
         if (!errorMessages.isEmpty()) {

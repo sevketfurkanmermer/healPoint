@@ -7,11 +7,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Configuration
@@ -25,7 +27,12 @@ public class AppConfig {
             public UserDetails loadUserByUsername(String patientTc) throws UsernameNotFoundException {
                 Optional<Patients> optional =patientRepository.findById(patientTc);
                 if (optional.isPresent()){
-                    return (UserDetails) optional.get();
+                    Patients patient = optional.get();
+                    return new User(
+                            patient.getPatientTc(),         // Kullanıcı adı
+                            patient.getPatient_password(),          // Şifre
+                            new ArrayList<>()               // Yetkiler (boş liste)
+                    );
                 }
                 return null;
             }
