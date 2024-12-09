@@ -10,9 +10,13 @@ import java.util.Optional;
 
 @Repository
 public interface PatientRepository extends JpaRepository<Patients, String> {
-    @Query("SELECT p FROM Patients p WHERE p.patientTc = :patientTc OR p.patientEmail = :patientEmail OR p.patientPhonenumber = :patientPhonenumber")
-    Optional<Patients> findExistingPatient(@Param("patientTc") String patientTc, @Param("patientEmail") String patientEmail, @Param("patientPhonenumber") String patientPhonenumber);
+    @Query("SELECT p FROM Patients p WHERE p.tc = :patientTc " +
+            "OR p.email = :patientEmail " +
+            "OR p.phoneNumber = :patientPhonenumber")
+    Optional<Patients> findExistingPatient(@Param("patientTc") String patientTc,
+                                           @Param("patientEmail") String patientEmail,
+                                           @Param("patientPhonenumber") String patientPhonenumber);
 
-    boolean existsByPatientEmailAndPatientTcNot(String patientEmail, String patientTc);
-    boolean existsByPatientPhonenumberAndPatientTcNot(String patientPhonenumber, String patientTc);
+    boolean existsByEmailAndTcNot(String patientEmail, String patientTc);
+    boolean existsByPhoneNumberAndTcNot(String patientPhoneNumber, String patientTc);
 }

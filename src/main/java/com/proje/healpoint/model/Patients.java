@@ -1,13 +1,14 @@
 package com.proje.healpoint.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -15,27 +16,18 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Patients {
-
-    @Id
-    @Column(nullable = false,length = 11)
-    private String patientTc;
+public class Patients extends User {
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(nullable = false)
-    private String Patient_name;
-    @Column(nullable = false)
-    private String Patient_surname;
-
-    private String Patient_gender;
-    @Column(nullable = false,unique = true)
-    private String patientPhonenumber;
-    @Column(nullable = false,unique = true)
-    private String patientEmail;
-    @Column(nullable = false)
-    private String Patient_password;
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
+    private Date birthDate;
+    @Transient
+    public Integer getAge() {
+        if (birthDate == null) {
+            return null;
+        }
+        LocalDate birthLocalDate = new java.sql.Date(birthDate.getTime()).toLocalDate();
+        return Period.between(birthLocalDate, LocalDate.now()).getYears();
+    }
 
     @ManyToMany(mappedBy = "patients")
     private List<Doctors> doctors;
@@ -43,8 +35,8 @@ public class Patients {
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Appointments> appointments;
 
-    //@OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
-    //private List<Reviews> reviews ;
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reviews> reviews;
 
 
 }

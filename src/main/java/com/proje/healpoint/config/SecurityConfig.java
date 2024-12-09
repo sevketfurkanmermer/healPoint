@@ -21,12 +21,13 @@ public class SecurityConfig {
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     private static final String AUTHENTICATE = "/authenticate";
-    private static final String REGISTER = "/api/patients/create";
+    private static final String REGISTER_PATIENT = "/api/v1/patients/create";
+    private static final String REGISTER_DOCTOR = "/api/v1/doctors/save";
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .authorizeHttpRequests(request->request.requestMatchers(AUTHENTICATE,REGISTER)
+                .authorizeHttpRequests(request->request.requestMatchers(AUTHENTICATE,REGISTER_PATIENT,REGISTER_DOCTOR)
                         .permitAll()
                         .anyRequest()
                         .authenticated())

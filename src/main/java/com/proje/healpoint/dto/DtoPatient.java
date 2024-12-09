@@ -7,21 +7,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DtoPatient {
-
-    private String patientTc;
-    private String Patient_name;
-    private String Patient_surname;
-    private String Patient_gender;
-    private String patientPhonenumber;
-    private String patientEmail;
-
-
+public class DtoPatient  extends DtoUser{
+    private String Tc;
+    private Date birthDate;
+    private String age;
     private List<DtoAppointment> appointments = new ArrayList<>();
 
 

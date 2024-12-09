@@ -33,11 +33,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             authHeader = authHeader.substring(7);
             System.out.println("Token from header: " + authHeader);
             if (jwtService.isTokenValid(authHeader)) {
-                String patientTc=jwtService.extractPatientTc(authHeader);
-                System.out.println("Extracted patientTc: " + patientTc); // Subject (T.C.)'yi yazdır
+                String tc=jwtService.extractTc(authHeader);
+                System.out.println("Extracted Tc: " + tc);
+                String userType = jwtService.extractUserType(authHeader);
+                System.out.println("UserType: " + userType);
+
 
                 SecurityContextHolder.getContext().setAuthentication(
-                        new UsernamePasswordAuthenticationToken(patientTc, null, Collections.emptyList()));
+                        new UsernamePasswordAuthenticationToken(tc, null, Collections.emptyList()));
             }
 
         }

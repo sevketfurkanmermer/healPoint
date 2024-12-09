@@ -1,6 +1,8 @@
 package com.proje.healpoint.config;
 
+import com.proje.healpoint.model.Doctors;
 import com.proje.healpoint.model.Patients;
+import com.proje.healpoint.repository.DoctorRepository;
 import com.proje.healpoint.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -20,18 +22,29 @@ import java.util.Optional;
 public class AppConfig {
     @Autowired
     private PatientRepository patientRepository;
+    @Autowired
+    private DoctorRepository doctorRepository;
     @Bean
     public UserDetailsService userDetailsService() {
        return new UserDetailsService() {
             @Override
-            public UserDetails loadUserByUsername(String patientTc) throws UsernameNotFoundException {
-                Optional<Patients> optional =patientRepository.findById(patientTc);
+            public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+                Optional<Patients> optional =patientRepository.findById(userName);
                 if (optional.isPresent()){
                     Patients patient = optional.get();
                     return new User(
-                            patient.getPatientTc(),         // Kullanıcı adı
-                            patient.getPatient_password(),          // Şifre
+                            patient.getTc(),         // Kullanıcı adı
+                            patient.getPassword(),          // Şifre
                             new ArrayList<>()               // Yetkiler (boş liste)
+                    );
+                }
+                Optional<Doctors> optionalDoctor = doctorRepository.findById(userName);
+                if (optionalDoctor.isPresent()) {
+                    Doctors doctor = optionalDoctor.get();
+                    return new User(
+                            doctor.getTc(),
+                            doctor.getPassword(),
+                            new ArrayList<>()
                     );
                 }
                 return null;

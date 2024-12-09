@@ -36,33 +36,34 @@ public class PatientServiceImpl implements IPatientService {
     @Override
     public String createPatient(DtoPatientIU dtoPatientIU) {
         Optional<Patients> existingPatient = patientRepository.findExistingPatient(
-                dtoPatientIU.getPatientTc(),
-                dtoPatientIU.getPatientEmail(),
-                dtoPatientIU.getPatientPhonenumber()
+                dtoPatientIU.getEmail(),
+                dtoPatientIU.getTc(),
+                dtoPatientIU.getPhoneNumber()
         );
         if (existingPatient.isPresent()) {
             Patients patient = existingPatient.get();
               StringBuilder errorMessage = new StringBuilder();
-            if (patient.getPatientTc().equals(dtoPatientIU.getPatientTc())) {
-                errorMessage.append("[TC: ").append(dtoPatientIU.getPatientTc()).append("] ");
+            if (patient.getTc().equals(dtoPatientIU.getTc())) {
+                errorMessage.append("[TC: ").append(dtoPatientIU.getTc()).append("] ");
             }
-            if (patient.getPatientEmail().equals(dtoPatientIU.getPatientEmail())) {
-                errorMessage.append("[Email: ").append(dtoPatientIU.getPatientEmail()).append("] ");
+            if (patient.getEmail().equals(dtoPatientIU.getEmail())) {
+                errorMessage.append("[Email: ").append(dtoPatientIU.getEmail()).append("] ");
             }
-            if (patient.getPatientPhonenumber().equals(dtoPatientIU.getPatientPhonenumber())) {
-                errorMessage.append("[Telefon: ").append(dtoPatientIU.getPatientPhonenumber()).append("] ");
+            if (patient.getPhoneNumber().equals(dtoPatientIU.getPhoneNumber())) {
+                errorMessage.append("[Telefon: ").append(dtoPatientIU.getPhoneNumber()).append("] ");
             }
             throw new BaseException(new ErrorMessage(MessageType.RECORD_ALREADY_EXIST, errorMessage.toString()));
         }
         Patients patients = new Patients();
-        patients.setPatientTc(dtoPatientIU.getPatientTc());
-        patients.setPatientEmail(dtoPatientIU.getPatientEmail());
-        patients.setPatientPhonenumber(dtoPatientIU.getPatientPhonenumber());
-        patients.setPatient_surname(dtoPatientIU.getPatient_surname());
-        patients.setPatient_name(dtoPatientIU.getPatient_name());
-        patients.setPatient_gender(dtoPatientIU.getPatient_gender());
-        String encodedPassword=passwordEncoder.encode(dtoPatientIU.getPatient_password());
-        patients.setPatient_password(encodedPassword);
+        patients.setTc(dtoPatientIU.getTc());
+        patients.setEmail(dtoPatientIU.getEmail());
+        patients.setPhoneNumber(dtoPatientIU.getPhoneNumber());
+        patients.setSurname(dtoPatientIU.getSurname());
+        patients.setName(dtoPatientIU.getName());
+        patients.setGender(dtoPatientIU.getGender());
+        patients.setBirthDate(dtoPatientIU.getBirthDate());
+        String encodedPassword=passwordEncoder.encode(dtoPatientIU.getPassword());
+        patients.setPassword(encodedPassword);
         patientRepository.save(patients);
         return "KAYIT OLUŞTURULDU";
     }
@@ -80,30 +81,33 @@ public class PatientServiceImpl implements IPatientService {
 
         List<String> errorMessages = new ArrayList<>();
 
-        if (patientRepository.existsByPatientEmailAndPatientTcNot(dtoPatientIU.getPatientEmail(), patientTc)) {
-            errorMessages.add("Email: " + dtoPatientIU.getPatientEmail());
+        if (patientRepository.existsByEmailAndTcNot(dtoPatientIU.getEmail(), patientTc)) {
+            errorMessages.add("Email: " + dtoPatientIU.getEmail());
         }
-        if (patientRepository.existsByPatientPhonenumberAndPatientTcNot(dtoPatientIU.getPatientPhonenumber(), patientTc)) {
-            errorMessages.add("Telefon: " + dtoPatientIU.getPatientPhonenumber());
+        if (patientRepository.existsByPhoneNumberAndTcNot(dtoPatientIU.getPhoneNumber(), patientTc)) {
+            errorMessages.add("Telefon: " + dtoPatientIU.getPhoneNumber());
         }
         if (!errorMessages.isEmpty()) {
             throw new BaseException(new ErrorMessage(MessageType.RECORD_ALREADY_EXIST, String.join(" - ", errorMessages)));
         }
         Patients existingPatient = optional.get();
-        if (dtoPatientIU.getPatient_gender() != null) { existingPatient.setPatient_gender(dtoPatientIU.getPatient_gender()); }
-        if (dtoPatientIU.getPatient_name() != null) { existingPatient.setPatient_name(dtoPatientIU.getPatient_name()); }
-        if (dtoPatientIU.getPatient_surname() != null) { existingPatient.setPatient_surname(dtoPatientIU.getPatient_surname()); }
-        if (dtoPatientIU.getPatientEmail() != null) { existingPatient.setPatientEmail(dtoPatientIU.getPatientEmail()); }
-        if (dtoPatientIU.getPatientPhonenumber() != null) { existingPatient.setPatientPhonenumber(dtoPatientIU.getPatientPhonenumber()); }
+        if (dtoPatientIU.getGender() != null) { existingPatient.setGender(dtoPatientIU.getGender()) ;}
+        if (dtoPatientIU.getName() != null) { existingPatient.setName(dtoPatientIU.getName()) ; }
+        if (dtoPatientIU.getSurname() != null) { existingPatient.setSurname(dtoPatientIU.getSurname()); }
+        if (dtoPatientIU.getEmail() != null) { existingPatient.setEmail(dtoPatientIU.getEmail()); }
+        if (dtoPatientIU.getPhoneNumber() != null) { existingPatient.setPhoneNumber(dtoPatientIU.getPhoneNumber()); }
+        if(dtoPatientIU.getBirthDate()!=null){existingPatient.setBirthDate(dtoPatientIU.getBirthDate());}
+
         patientRepository.save(existingPatient);
         return "KAYIT GÜNCELLENDİ";
         }
 
         @Override
-        public DtoPatient getPatientById (String Patient_tc){
-            Optional<Patients> optional = patientRepository.findById(Patient_tc);
-            if (optional.isEmpty()){
-                throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, Patient_tc));
+        public DtoPatient getPatientById (String token){
+            String patientTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            Optional<Patients> optional = patientRepository.findById(patientTc);
+            if (optional.isEmpty()) {
+                throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, patientTc));
             }
             else {
                 Patients existingPatient = optional.get();
@@ -117,7 +121,7 @@ public class PatientServiceImpl implements IPatientService {
                     dtoAppointment.setAppointment_time(appointment.getAppointment_time());
                     dtoAppointment.setAppointment_status(appointment.getAppointment_status());
                     dtoAppointment.setAppointment_text(appointment.getAppointment_text());
-                    dtoAppointment.setPatientTc(dtoPatient.getPatientTc());
+                    dtoAppointment.setPatientTc(dtoPatient.getTc());
                     DtoDoctorReview dtoDoctorReview = new DtoDoctorReview();
                     BeanUtils.copyProperties(appointment.getDoctor(), dtoDoctorReview);
                     dtoAppointment.setDoctor(dtoDoctorReview);

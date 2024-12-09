@@ -10,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name ="Payments" )
@@ -20,16 +21,13 @@ public class Payments {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Payment_id;
-
-
     private BigDecimal Amount;
-
     @Enumerated(EnumType.STRING)
     private PaymentStatus Status;
-
     @CreationTimestamp
     private LocalDateTime createdAt;
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
 
+    @ManyToOne
+    @JoinColumn(name = "doctor_tc", nullable = false)
+    private Doctors doctor;
 }

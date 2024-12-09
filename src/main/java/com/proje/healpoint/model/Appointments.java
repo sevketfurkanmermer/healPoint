@@ -32,19 +32,18 @@ public class Appointments {
     private AppointmentStatus Appointment_status;
 
     private String Appointment_text;
-
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "patient_tc", nullable = false)
     private Patients patient;
-
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "doctor_id", nullable = false)
     private Doctors doctor;
+    @OneToOne(mappedBy = "appointment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Reviews review;
 
 
 

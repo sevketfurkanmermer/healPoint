@@ -12,14 +12,9 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DtoDoctorIU {
-    private String Doctor_tc;
-    private String Doctor_name;
-    private String Doctor_surname;
-    private String Doctor_phonenumber;
-    private String Doctor_password;
+public class DtoDoctorIU extends DtoUserIU{
     private String branch;
-    private String Doctor_email;
+    private String about;
     private String city;
     private String district;
     private String address;

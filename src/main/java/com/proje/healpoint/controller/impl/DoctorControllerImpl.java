@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path="/api/doctors")
+@RequestMapping(path="/api/v1/doctors")
 public class DoctorControllerImpl implements IDoctorController {
 
     @Autowired

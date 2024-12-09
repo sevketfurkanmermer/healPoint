@@ -10,5 +10,5 @@ public interface IPatientController {
 
     public ResponseEntity<String> updatePatient(DtoPatientIU dtoPatientIU);
 
-    public DtoPatient getPatient(String Patient_tc);
+    public ResponseEntity<DtoPatient> getPatient();
 }

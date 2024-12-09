@@ -16,9 +16,10 @@ public class JwtService {
 
     private final String SECRET_KEY="BkHrpdinMVpyGgBlPTMDfO7Tv5PRZQb6URKfdyHN1zA";
 
-    public String generateToken(String patientTc) {
+    public String generateToken(String tc,String type) {
         return Jwts.builder()
-                .setSubject(patientTc)
+                .setSubject(tc)
+                .claim("type", type)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
                 .signWith(SignatureAlgorithm.HS256,SECRET_KEY)
@@ -26,13 +27,22 @@ public class JwtService {
 
     }
 
-    public String extractPatientTc(String token) {
+    public String extractTc(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(SECRET_KEY)
                 .parseClaimsJws(token)
                 .getBody();
 
         return claims.getSubject();
+    }
+
+    public String extractUserType(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.get("userType", String.class); // Kullanıcı türünü döndürür
     }
 
     public boolean isTokenValid(String token) {

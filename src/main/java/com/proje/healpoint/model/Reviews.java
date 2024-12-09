@@ -17,12 +17,10 @@ public class Reviews {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Review_id;
-
     private String comments;
     private int points;
     @CreationTimestamp
     private LocalDateTime created_at;
-
     @ManyToOne
     @JoinColumn(name = "patient_tc", nullable = false)
     private Patients patient;
@@ -34,6 +32,4 @@ public class Reviews {
     @OneToOne
     @JoinColumn(name = "appointment_id", nullable = false)
     private Appointments appointment;
-
-
 }

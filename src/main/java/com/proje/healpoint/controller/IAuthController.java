@@ -2,7 +2,8 @@ package com.proje.healpoint.controller;
 
 import com.proje.healpoint.jwt.AuthRequest;
 import com.proje.healpoint.jwt.AuthResponse;
+import org.springframework.http.ResponseEntity;
 
 public interface IAuthController {
-    public AuthResponse authenticate(AuthRequest authRequest);
+    public ResponseEntity<AuthResponse> authenticate(AuthRequest authRequest);
 }
