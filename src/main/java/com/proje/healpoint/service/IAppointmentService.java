@@ -4,5 +4,5 @@ import com.proje.healpoint.dto.DtoAppointment;
 
 public interface IAppointmentService {
 
-    public String createAppointment(DtoAppointment dtoAppointment);
+    public DtoAppointment createAppointment(DtoAppointment dtoAppointment);
 }

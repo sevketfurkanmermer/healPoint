@@ -1,6 +1,7 @@
 package com.proje.healpoint.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,14 +21,7 @@ public class Patients extends User {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(nullable = false)
     private Date birthDate;
-    @Transient
-    public Integer getAge() {
-        if (birthDate == null) {
-            return null;
-        }
-        LocalDate birthLocalDate = new java.sql.Date(birthDate.getTime()).toLocalDate();
-        return Period.between(birthLocalDate, LocalDate.now()).getYears();
-    }
+
 
     @ManyToMany(mappedBy = "patients")
     private List<Doctors> doctors;

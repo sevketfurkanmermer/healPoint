@@ -29,11 +29,11 @@ public class PatientControllerImpl implements IPatientController {
 
     @PutMapping(path = "/update")
     @Override
-    public ResponseEntity<String> updatePatient(@RequestBody DtoPatientIU dtoPatientIU) {
-        String Patient_tc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String response = patientService.updatePatient(dtoPatientIU);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<DtoPatient> updatePatient(@RequestBody DtoPatientIU dtoPatientIU) {
+        DtoPatient updatedPatient = patientService.updatePatient(dtoPatientIU);
+        return ResponseEntity.ok(updatedPatient);
     }
+
 
     @GetMapping("/list")
     public ResponseEntity<DtoPatient> getPatient() {

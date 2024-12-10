@@ -13,25 +13,27 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
-@Table(name = "Appointments")
+@Table(name = "Appointments", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"doctor_id", "appointment_date", "appointment_time"})
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Appointments {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Appointment_id;
+    private Long appointmentId;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date Appointment_date;
+    private Date appointmentDate;
 
     @Column(nullable = false)
-    private String appointment_time;
+    private String appointmentTime;
 
     @Enumerated(EnumType.STRING)
-    private AppointmentStatus Appointment_status;
+    private AppointmentStatus appointmentStatus;
 
-    private String Appointment_text;
+    private String appointmentText;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp

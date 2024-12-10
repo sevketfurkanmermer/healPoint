@@ -3,12 +3,13 @@ package com.proje.healpoint.controller;
 import com.proje.healpoint.dto.DtoPatient;
 import com.proje.healpoint.dto.DtoPatientIU;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 
 public interface IPatientController {
 
     public ResponseEntity<String> createPatient(DtoPatientIU dtoPatientIU);
 
-    public ResponseEntity<String> updatePatient(DtoPatientIU dtoPatientIU);
+    public ResponseEntity<DtoPatient> updatePatient( DtoPatientIU dtoPatientIU);
 
     public ResponseEntity<DtoPatient> getPatient();
 }

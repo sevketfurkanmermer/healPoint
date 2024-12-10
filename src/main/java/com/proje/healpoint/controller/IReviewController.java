@@ -4,5 +4,5 @@ import com.proje.healpoint.dto.DtoReview;
 import org.springframework.http.ResponseEntity;
 
 public interface IReviewController {
-    public ResponseEntity<String> createReview(DtoReview dtoReview);
+    public ResponseEntity<DtoReview> createReview(DtoReview dtoReview);
 }

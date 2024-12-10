@@ -2,6 +2,7 @@ package com.proje.healpoint.service.impl;
 
 import com.proje.healpoint.controller.IAppointmentController;
 import com.proje.healpoint.dto.DtoAppointment;
+import com.proje.healpoint.dto.DtoDoctorReview;
 import com.proje.healpoint.exception.BaseException;
 import com.proje.healpoint.exception.ErrorMessage;
 import com.proje.healpoint.exception.MessageType;
@@ -15,6 +16,7 @@ import com.proje.healpoint.service.IAppointmentService;
 import com.proje.healpoint.service.IAppointmentService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -31,19 +33,59 @@ public class AppointmentServiceImpl implements IAppointmentService {
     @Autowired
     private DoctorRepository doctorRepository;
      @Override
-    public String createAppointment(DtoAppointment dtoAppointment) {
+     public DtoAppointment createAppointment(DtoAppointment dtoAppointment) {
+
+         String patientTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
          List<String> errorMessages = new ArrayList<>();
-         Optional<Patients> patients = patientRepository.findById(dtoAppointment.getPatientTc());
-         Optional<Doctors> doctors= doctorRepository.findById(dtoAppointment.getDoctorTc());
-         if(patients.isEmpty()){errorMessages.add("Hasta Tc: " + dtoAppointment.getPatientTc());}
-         if(doctors.isEmpty()){errorMessages.add("Doktor Tc: " + dtoAppointment.getDoctorTc());}
-         if (!errorMessages.isEmpty()) {throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, String.join(" - ", errorMessages)));}
+
+         Optional<Patients> patients = patientRepository.findById(patientTc);
+         Optional<Doctors> doctors = doctorRepository.findById(dtoAppointment.getDoctorTc());
+
+         if (patients.isEmpty()) {
+             errorMessages.add("Hasta Tc: " + patientTc);
+         }
+         if (doctors.isEmpty()) {
+             errorMessages.add("Doktor Tc: " + dtoAppointment.getDoctorTc());
+         }
+
+
+         if (!errorMessages.isEmpty()) {
+             throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, String.join(" - ", errorMessages)));
+         }
+
+         boolean isAlreadyBooked = appointmentRepository.existsByDoctor_TcAndAppointmentDateAndAppointmentTime(
+                 dtoAppointment.getDoctorTc(),
+                 dtoAppointment.getAppointmentDate(),
+                 dtoAppointment.getAppointmentTime()
+         );
+
+         if (isAlreadyBooked) {
+             throw new BaseException(
+                     new ErrorMessage(MessageType.APPOINTMENT_ALREADY_EXISTS, "Bu doktor için belirtilen tarih ve saat zaten dolu."));
+         }
+
          Appointments appointments = new Appointments();
          BeanUtils.copyProperties(dtoAppointment, appointments);
          appointments.setPatient(patients.get());
          appointments.setDoctor(doctors.get());
-         appointmentRepository.save(appointments);
-         return "Randevu Başarıyla Oluşturuldu";
-    }
+         Appointments savedAppointment = appointmentRepository.save(appointments);
 
-    }
+         DtoAppointment response = new DtoAppointment();
+         BeanUtils.copyProperties(savedAppointment, response);
+
+         DtoDoctorReview dtoDoctor = new DtoDoctorReview();
+         dtoDoctor.setDoctorName(savedAppointment.getDoctor().getName());
+         dtoDoctor.setDoctorSurname(savedAppointment.getDoctor().getSurname());
+         dtoDoctor.setBranch(savedAppointment.getDoctor().getBranch());
+         dtoDoctor.setCity(savedAppointment.getDoctor().getCity());
+         dtoDoctor.setEmail(savedAppointment.getDoctor().getEmail());
+         response.setDoctor(dtoDoctor);
+
+         response.setPatientTc(savedAppointment.getPatient().getTc());
+
+         return response;
+     }
+
+
+}

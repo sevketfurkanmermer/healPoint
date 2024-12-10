@@ -15,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -68,14 +66,14 @@ public class PatientServiceImpl implements IPatientService {
         return "KAYIT OLUŞTURULDU";
     }
     @Override
-    public String updatePatient(DtoPatientIU dtoPatientIU) {
+    public DtoPatient updatePatient(DtoPatientIU dtoPatientIU) {
 
+        // SecurityContextHolder ile hasta TC bilgisini al
         String patientTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         System.out.println("PatientTc in service: " + patientTc);
 
-
         Optional<Patients> optional = patientRepository.findById(patientTc);
-         if (optional.isEmpty()) {
+        if (optional.isEmpty()) {
             throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, patientTc));
         }
 
@@ -90,19 +88,36 @@ public class PatientServiceImpl implements IPatientService {
         if (!errorMessages.isEmpty()) {
             throw new BaseException(new ErrorMessage(MessageType.RECORD_ALREADY_EXIST, String.join(" - ", errorMessages)));
         }
-        Patients existingPatient = optional.get();
-        if (dtoPatientIU.getGender() != null) { existingPatient.setGender(dtoPatientIU.getGender()) ;}
-        if (dtoPatientIU.getName() != null) { existingPatient.setName(dtoPatientIU.getName()) ; }
-        if (dtoPatientIU.getSurname() != null) { existingPatient.setSurname(dtoPatientIU.getSurname()); }
-        if (dtoPatientIU.getEmail() != null) { existingPatient.setEmail(dtoPatientIU.getEmail()); }
-        if (dtoPatientIU.getPhoneNumber() != null) { existingPatient.setPhoneNumber(dtoPatientIU.getPhoneNumber()); }
-        if(dtoPatientIU.getBirthDate()!=null){existingPatient.setBirthDate(dtoPatientIU.getBirthDate());}
 
-        patientRepository.save(existingPatient);
-        return "KAYIT GÜNCELLENDİ";
+        Patients existingPatient = optional.get();
+        if (dtoPatientIU.getGender() != null) {
+            existingPatient.setGender(dtoPatientIU.getGender());
+        }
+        if (dtoPatientIU.getName() != null) {
+            existingPatient.setName(dtoPatientIU.getName());
+        }
+        if (dtoPatientIU.getSurname() != null) {
+            existingPatient.setSurname(dtoPatientIU.getSurname());
+        }
+        if (dtoPatientIU.getEmail() != null) {
+            existingPatient.setEmail(dtoPatientIU.getEmail());
+        }
+        if (dtoPatientIU.getPhoneNumber() != null) {
+            existingPatient.setPhoneNumber(dtoPatientIU.getPhoneNumber());
+        }
+        if (dtoPatientIU.getBirthDate() != null) {
+            existingPatient.setBirthDate(dtoPatientIU.getBirthDate());
         }
 
-        @Override
+        patientRepository.save(existingPatient);
+
+        DtoPatient dtoPatient = new DtoPatient();
+        BeanUtils.copyProperties(existingPatient, dtoPatient);
+        return dtoPatient;
+    }
+
+
+    @Override
         public DtoPatient getPatientById (String token){
             String patientTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             Optional<Patients> optional = patientRepository.findById(patientTc);
@@ -116,11 +131,11 @@ public class PatientServiceImpl implements IPatientService {
                 List<DtoAppointment> dtoAppointments = new ArrayList<>();
                 for (Appointments appointment : existingPatient.getAppointments()) {
                     DtoAppointment dtoAppointment = new DtoAppointment();
-                    dtoAppointment.setAppointment_id(appointment.getAppointment_id());
-                    dtoAppointment.setAppointment_date(appointment.getAppointment_date());
-                    dtoAppointment.setAppointment_time(appointment.getAppointment_time());
-                    dtoAppointment.setAppointment_status(appointment.getAppointment_status());
-                    dtoAppointment.setAppointment_text(appointment.getAppointment_text());
+                    dtoAppointment.setAppointmentId(appointment.getAppointmentId());
+                    dtoAppointment.setAppointmentDate(appointment.getAppointmentDate());
+                    dtoAppointment.setAppointmentTime(appointment.getAppointmentTime());
+                    dtoAppointment.setAppointmentStatus(appointment.getAppointmentStatus());
+                    dtoAppointment.setAppointmentText(appointment.getAppointmentText());
                     dtoAppointment.setPatientTc(dtoPatient.getTc());
                     DtoDoctorReview dtoDoctorReview = new DtoDoctorReview();
                     BeanUtils.copyProperties(appointment.getDoctor(), dtoDoctorReview);

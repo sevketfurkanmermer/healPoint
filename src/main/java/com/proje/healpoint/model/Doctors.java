@@ -25,6 +25,7 @@ public class Doctors extends User {
     private String city;
     private String district;
     private String address;
+    private Double avgPoint;
     @ManyToMany
     @JoinTable(name="Doctor_patient",
             joinColumns = @JoinColumn(name="doctor_tc"),

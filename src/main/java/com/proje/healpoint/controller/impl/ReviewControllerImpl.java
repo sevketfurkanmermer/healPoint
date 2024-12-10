@@ -17,8 +17,8 @@ public class ReviewControllerImpl implements IReviewController {
     private IReviewService reviewService;
     @Override
     @PostMapping(path="/create")
-    public ResponseEntity<String> createReview(@RequestBody DtoReview dtoReview) {
-        String response = reviewService.createReview(dtoReview);
+    public ResponseEntity<DtoReview> createReview(@RequestBody DtoReview dtoReview) {
+        DtoReview response = reviewService.createReview(dtoReview);
         return ResponseEntity.ok(response);
     }
 }

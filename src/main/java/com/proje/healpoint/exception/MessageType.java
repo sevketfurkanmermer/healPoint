@@ -10,7 +10,10 @@ public enum MessageType {
     INVALID_INPUT               ("1004","Eksik bilgi"),
     INVALID_TOKEN               ("1005","Geçersiz token"),
     AUTHENTICATION_FAILED       ("1006","Kimlik doğrulama başarısız"),
-    INVALID_USER_TYPE           ("1007","Geçersiz kullanıcı tipi:");
+    INVALID_USER_TYPE           ("1007","Geçersiz kullanıcı tipi:"),
+    APPOINTMENT_ALREADY_EXISTS  ("1008","Bu randevu dolu! Başka saat ya da tarih seçiniz."),
+    UNAUTHORIZED                ("1009","Bu randevu size ait değil!"),
+    REVIEW_ALREADY_EXISTS       ("1010","Bu randevu için değerlendirme zaten yapılmış.");
 
     private String code;
     private String message;

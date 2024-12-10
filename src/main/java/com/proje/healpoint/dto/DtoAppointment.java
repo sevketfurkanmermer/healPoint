@@ -15,11 +15,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DtoAppointment {
-    private Long Appointment_id;
-    private Date Appointment_date;
-    private String appointment_time;
-    private AppointmentStatus Appointment_status;
-    private String Appointment_text;
+    private Long appointmentId;
+    private Date appointmentDate;
+    private String appointmentTime;
+    private AppointmentStatus appointmentStatus;
+    private String appointmentText;
 
     private String patientTc;
     private String doctorTc;

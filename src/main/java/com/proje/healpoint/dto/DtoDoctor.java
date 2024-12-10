@@ -19,6 +19,7 @@ public class DtoDoctor extends DtoUser {
     private String city;
     private String district;
     private String address;
+    private double avgPoint;
 
 
 }
