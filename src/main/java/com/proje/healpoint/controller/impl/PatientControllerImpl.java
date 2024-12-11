@@ -37,10 +37,7 @@ public class PatientControllerImpl implements IPatientController {
 
     @GetMapping("/list")
     public ResponseEntity<DtoPatient> getPatient() {
-
-        String tc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        DtoPatient dtoPatient = patientService.getPatientById(tc);
+        DtoPatient dtoPatient = patientService.getPatientById();
         return ResponseEntity.ok(dtoPatient);
     }
 }

@@ -9,6 +9,6 @@ public interface IPatientService {
 
     public  DtoPatient updatePatient(DtoPatientIU dtoPatientIU);
 
-    public DtoPatient getPatientById(String Patient_tc);
+    public DtoPatient getPatientById();
 
 }

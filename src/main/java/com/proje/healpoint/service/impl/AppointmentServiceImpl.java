@@ -3,6 +3,7 @@ package com.proje.healpoint.service.impl;
 import com.proje.healpoint.controller.IAppointmentController;
 import com.proje.healpoint.dto.DtoAppointment;
 import com.proje.healpoint.dto.DtoDoctorReview;
+import com.proje.healpoint.enums.AppointmentStatus;
 import com.proje.healpoint.exception.BaseException;
 import com.proje.healpoint.exception.ErrorMessage;
 import com.proje.healpoint.exception.MessageType;
@@ -19,6 +20,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -87,5 +92,48 @@ public class AppointmentServiceImpl implements IAppointmentService {
          return response;
      }
 
+    public List<DtoAppointment> getUpcomingAppointments() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime twoDaysLater = now.plusDays(2);
+        String patientTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        List<Appointments> activeAppointments = appointmentRepository.findByPatient_TcAndAppointmentStatus
+                (patientTc, AppointmentStatus.AKTİF);
+
+        List<DtoAppointment> upcomingAppointments = new ArrayList<>();
+
+        for (Appointments appointment : activeAppointments) {
+            try {
+                LocalDate appointmentDate = appointment.getAppointmentDate().toInstant()
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDate(); //
+                LocalTime appointmentTime = LocalTime.parse(appointment.getAppointmentTime());
+                LocalDateTime appointmentDateTime = LocalDateTime.of(appointmentDate, appointmentTime);
+
+                if (appointmentDateTime.isBefore(twoDaysLater) && appointmentDateTime.isAfter(now)) {
+
+                    DtoAppointment dtoAppointment = new DtoAppointment();
+                    dtoAppointment.setAppointmentId(appointment.getAppointmentId());
+                    dtoAppointment.setAppointmentDate(appointment.getAppointmentDate());
+                    dtoAppointment.setAppointmentTime(appointment.getAppointmentTime());
+                    dtoAppointment.setAppointmentStatus(appointment.getAppointmentStatus());
+                    dtoAppointment.setAppointmentText(appointment.getAppointmentText());
+
+                    DtoDoctorReview dtoDoctor = new DtoDoctorReview();
+                    dtoDoctor.setDoctorName(appointment.getDoctor().getName());
+                    dtoDoctor.setDoctorSurname(appointment.getDoctor().getSurname());
+                    dtoDoctor.setBranch(appointment.getDoctor().getBranch());
+                    dtoDoctor.setCity(appointment.getDoctor().getCity());
+                    dtoDoctor.setEmail(appointment.getDoctor().getEmail());
+                    dtoAppointment.setDoctor(dtoDoctor);
+
+                    upcomingAppointments.add(dtoAppointment);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return upcomingAppointments;
+    }
 
 }

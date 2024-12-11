@@ -118,7 +118,7 @@ public class PatientServiceImpl implements IPatientService {
 
 
     @Override
-        public DtoPatient getPatientById (String token){
+        public DtoPatient getPatientById (){
             String patientTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             Optional<Patients> optional = patientRepository.findById(patientTc);
             if (optional.isEmpty()) {
