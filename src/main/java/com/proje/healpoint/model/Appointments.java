@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 
 @Entity
@@ -42,18 +44,8 @@ public class Appointments {
     @JoinColumn(name = "patient_tc", nullable = false)
     private Patients patient;
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "doctor_id", nullable = false)
+    @JoinColumn(name = "doctor_tc", nullable = false)
     private Doctors doctor;
     @OneToOne(mappedBy = "appointment", cascade = CascadeType.ALL, orphanRemoval = true)
     private Reviews review;
-
-
-
-
-
-
-
-
-
-
 }

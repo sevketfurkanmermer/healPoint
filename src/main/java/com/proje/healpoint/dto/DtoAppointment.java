@@ -1,12 +1,13 @@
 package com.proje.healpoint.dto;
 
 import com.proje.healpoint.enums.AppointmentStatus;
-import com.proje.healpoint.model.Reviews;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 

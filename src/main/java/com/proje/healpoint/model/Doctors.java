@@ -1,15 +1,13 @@
 package com.proje.healpoint.model;
 
 import jakarta.persistence.*;
-import jdk.jfr.Name;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -26,6 +24,9 @@ public class Doctors extends User {
     private String district;
     private String address;
     private Double avgPoint;
+    private LocalTime workingHoursStart; 
+    private LocalTime workingHoursEnd;
+
     @ManyToMany
     @JoinTable(name="Doctor_patient",
             joinColumns = @JoinColumn(name="doctor_tc"),

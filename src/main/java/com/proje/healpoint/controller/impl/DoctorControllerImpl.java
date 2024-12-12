@@ -5,7 +5,6 @@ import com.proje.healpoint.dto.DtoDoctor;
 import com.proje.healpoint.dto.DtoDoctorIU;
 import com.proje.healpoint.service.IDoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

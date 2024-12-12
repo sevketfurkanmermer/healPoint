@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Data
 @NoArgsConstructor
@@ -20,6 +21,7 @@ public class DtoDoctor extends DtoUser {
     private String district;
     private String address;
     private double avgPoint;
-
+    private LocalTime workingHoursStart;
+    private LocalTime workingHoursEnd;
 
 }
