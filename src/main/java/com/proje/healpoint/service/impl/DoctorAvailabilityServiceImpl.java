@@ -53,17 +53,16 @@ public class DoctorAvailabilityServiceImpl implements IDoctorAvailabilityService
 
         DtoDoctorAvailability dtoDoctorAvailability = new DtoDoctorAvailability();
 
-        Optional<DoctorAvailability> optionalDoctorAvailability = repository.findById(id);
+        Optional<DoctorAvailability> optionalAvailability = repository.findById(id);
 
-        if (optionalDoctorAvailability.isPresent()) {
-            DoctorAvailability availability = optionalDoctorAvailability.get();
-            BeanUtils.copyProperties(optionalDoctorAvailability, availability);
-            DoctorAvailability updatedAvailability = repository.save(availability);
-            BeanUtils.copyProperties(updatedAvailability, dtoDoctorAvailability);
-            return dtoDoctorAvailability;
+        if (!optionalAvailability.isPresent()) {
+            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, id.toString()));
         }
-
-        return null;
+        DoctorAvailability availability = optionalAvailability.get();
+        DoctorAvailability updatedAvailability = repository.save(availability);
+        BeanUtils.copyProperties(updatedAvailability, dtoDoctorAvailability);
+        return dtoDoctorAvailability;
+        
     }
 
     public DtoDoctorAvailability getDoctorAvailability(String doctorId, Date date) {
@@ -90,8 +89,6 @@ public class DoctorAvailabilityServiceImpl implements IDoctorAvailabilityService
     
 
     public List<LocalTime> getAvailableTimes(Doctors doctor, Date date) {
-
-        String tc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         
         DoctorAvailability availability = doctor.getAvailability();
         if (availability == null) {
