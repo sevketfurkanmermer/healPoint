@@ -42,18 +42,8 @@ public class Appointments {
     @JoinColumn(name = "patient_tc", nullable = false)
     private Patients patient;
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "doctor_id", nullable = false)
+    @JoinColumn(name = "doctor_tc", nullable = false)
     private Doctors doctor;
     @OneToOne(mappedBy = "appointment", cascade = CascadeType.ALL, orphanRemoval = true)
     private Reviews review;
-
-
-
-
-
-
-
-
-
-
 }

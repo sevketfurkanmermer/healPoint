@@ -5,7 +5,6 @@ import com.proje.healpoint.dto.DtoDoctor;
 import com.proje.healpoint.dto.DtoDoctorIU;
 import com.proje.healpoint.service.IDoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,7 +32,7 @@ public class DoctorControllerImpl implements IDoctorController {
     @DeleteMapping("/delete/{id}")
     public void deleteDoctorById(@PathVariable(name = "id") String doctorTc) {
         doctorService.deleteDoctorById(doctorTc);
-    }
+    }   
 
     @Override
     @PostMapping("/save")
@@ -43,7 +42,7 @@ public class DoctorControllerImpl implements IDoctorController {
 
     @Override
     @PutMapping(path="/{id}")
-    public DtoDoctor updateDoctorById(DtoDoctorIU dtoDoctorIU, @PathVariable(name = "id") String doctorTc) {
+    public DtoDoctor updateDoctorById(@RequestBody DtoDoctorIU dtoDoctorIU, @PathVariable(name = "id") String doctorTc) {
         return doctorService.updateDoctor(doctorTc, dtoDoctorIU);
     }
 }

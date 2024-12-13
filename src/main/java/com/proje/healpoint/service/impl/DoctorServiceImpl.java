@@ -4,11 +4,11 @@ import com.proje.healpoint.dto.DtoDoctor;
 import com.proje.healpoint.dto.DtoDoctorIU;
 import com.proje.healpoint.jwt.JwtService;
 import com.proje.healpoint.model.Doctors;
-import com.proje.healpoint.model.Patients;
 import com.proje.healpoint.repository.DoctorRepository;
 import com.proje.healpoint.service.IDoctorService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +27,7 @@ public class DoctorServiceImpl implements IDoctorService {
     private JwtService jwtService;
     @Override
     public List<DtoDoctor> getAllDoctors() {
+        String Tc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<DtoDoctor> dtoDoctorList = new ArrayList<>();
         for (Doctors doctor : doctorRepository.findAll()) {
             DtoDoctor dtoDoctor = new DtoDoctor();
