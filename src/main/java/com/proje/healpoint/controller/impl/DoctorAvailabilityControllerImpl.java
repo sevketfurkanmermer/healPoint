@@ -12,16 +12,17 @@ import com.proje.healpoint.dto.DtoDoctorAvailabilityIU;
 import com.proje.healpoint.service.IDoctorAvailabilityService;
 
 @RestController
-@RequestMapping(path="/api/v1/doctor/availability")
+@RequestMapping(path = "/api/v1/doctor/availability")
 public class DoctorAvailabilityControllerImpl implements IDoctorAvailabailityController {
 
     @Autowired
     IDoctorAvailabilityService doctorAvailabilityService;
 
     @Override
-    @GetMapping("/times")
-    public ResponseEntity<DtoDoctorAvailability> getDoctorAvailability(@RequestParam Date date) {
-        DtoDoctorAvailability availabilities = doctorAvailabilityService.getDoctorAvailability(date);
+    @GetMapping("/times/{id}")
+    public ResponseEntity<DtoDoctorAvailability> getDoctorAvailability(@PathVariable(name = "id") String doctorTc,
+            @RequestParam Date date) {
+        DtoDoctorAvailability availabilities = doctorAvailabilityService.getDoctorAvailability(doctorTc, date);
         return ResponseEntity.ok(availabilities);
     }
 
@@ -33,7 +34,8 @@ public class DoctorAvailabilityControllerImpl implements IDoctorAvailabailityCon
 
     @Override
     @PutMapping("/update/{id}")
-    public DtoDoctorAvailability updateDoctorAvailability(@RequestBody DtoDoctorAvailabilityIU dtoDoctorAvailabilityIU, @PathVariable(name = "id") Long id) {
+    public DtoDoctorAvailability updateDoctorAvailability(@RequestBody DtoDoctorAvailabilityIU dtoDoctorAvailabilityIU,
+            @PathVariable(name = "id") Long id) {
         return doctorAvailabilityService.updateDoctorWorkTimes(id, dtoDoctorAvailabilityIU);
     }
 
