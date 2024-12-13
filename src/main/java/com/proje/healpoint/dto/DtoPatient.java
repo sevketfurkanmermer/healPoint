@@ -1,8 +1,6 @@
 package com.proje.healpoint.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.proje.healpoint.model.Appointments;
-import com.proje.healpoint.model.Doctors;
 import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
