@@ -38,13 +38,30 @@ public class DoctorAvailabilityServiceImpl implements IDoctorAvailabilityService
     @Override
     public DtoDoctorAvailability saveDoctorAvailability(DtoDoctorAvailabilityIU doctorAvailabilityIU) {
         String tc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        DtoDoctorAvailability dtoDoctorAvailability = new DtoDoctorAvailability();
+
+        // Doktoru bul
+        Doctors doctor = doctorRepository.findById(tc)
+                .orElseThrow(() -> new BaseException(
+                        new ErrorMessage(MessageType.NO_RECORD_EXIST, "Doctor not found: " + tc)));
+
+        Optional<DoctorAvailability> existingAvailability = Optional.ofNullable(repository.findByDoctor_Tc(tc));
+
+        if (existingAvailability.isPresent()) {
+            throw new BaseException(new ErrorMessage(
+                    MessageType.RECORD_ALREADY_EXIST,
+                    "Availability record already exists. Please use update instead."));
+        }
+
         DoctorAvailability availability = new DoctorAvailability();
         BeanUtils.copyProperties(doctorAvailabilityIU, availability);
+        availability.setDoctor(doctor);
 
         DoctorAvailability savedAvailability = repository.save(availability);
 
+        // DTO'ya dönüştür
+        DtoDoctorAvailability dtoDoctorAvailability = new DtoDoctorAvailability();
         BeanUtils.copyProperties(savedAvailability, dtoDoctorAvailability);
+
         return dtoDoctorAvailability;
     }
 
@@ -60,57 +77,65 @@ public class DoctorAvailabilityServiceImpl implements IDoctorAvailabilityService
         if (!optionalAvailability.isPresent()) {
             throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, id.toString()));
         }
+
         DoctorAvailability availability = optionalAvailability.get();
-        BeanUtils.copyProperties(doctorAvailabilityIU,availability);
+        BeanUtils.copyProperties(doctorAvailabilityIU, availability);
         DoctorAvailability updatedAvailability = repository.save(availability);
         BeanUtils.copyProperties(updatedAvailability, dtoDoctorAvailability);
         return dtoDoctorAvailability;
-        
+
     }
 
-    public DtoDoctorAvailability getDoctorAvailability(String doctorId, Date date) {
+    public DtoDoctorAvailability getDoctorAvailability(Date date) {
         String tc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Doctors doctor = doctorRepository.findById(tc)
                 .orElseThrow(() -> new BaseException(
-                        new ErrorMessage(MessageType.NO_RECORD_EXIST, doctorId)));
-    
+                        new ErrorMessage(MessageType.NO_RECORD_EXIST, tc)));
+
         DoctorAvailability availability = doctor.getAvailability();
         if (availability == null) {
             throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Doctor availability not found"));
         }
         List<LocalTime> availableTimes = getAvailableTimes(doctor, date);
-    
+
         DtoDoctorAvailability dto = new DtoDoctorAvailability();
         dto.setAvailableDate(date);
         dto.setAvailableTimes(availableTimes);
         dto.setWorkingHoursStart(availability.getWorkingHoursStart());
         dto.setWorkingHoursEnd(availability.getWorkingHoursEnd());
-    
+
         return dto;
     }
-    
 
     public List<LocalTime> getAvailableTimes(Doctors doctor, Date date) {
-        
         DoctorAvailability availability = doctor.getAvailability();
         if (availability == null) {
             throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Doctor availability not found"));
         }
-    
+
         LocalTime start = availability.getWorkingHoursStart();
         LocalTime end = availability.getWorkingHoursEnd();
-    
+
         List<LocalTime> availableTimes = new ArrayList<>();
+
+        boolean hasAppointments = appointmentRepository.existsByDoctorAndAppointmentDate(doctor, date);
+        if (!hasAppointments) {
+            while (start.isBefore(end)) {
+                availableTimes.add(start);
+                start = start.plusHours(1);
+            }
+            return availableTimes;
+        }
+
         while (start.isBefore(end)) {
             if (isSlotAvailable(doctor, date, start.toString())) {
                 availableTimes.add(start);
             }
-            start = start.plusHours(1); 
+            start = start.plusHours(1);
         }
-    
+
         return availableTimes;
     }
-    
 
     private boolean isSlotAvailable(Doctors doctor, Date date, String time) {
         return !appointmentRepository.existsByDoctorAndAppointmentDateAndAppointmentTime(doctor, date, time);

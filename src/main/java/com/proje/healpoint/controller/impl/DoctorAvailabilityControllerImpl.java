@@ -18,11 +18,10 @@ public class DoctorAvailabilityControllerImpl implements IDoctorAvailabailityCon
     @Autowired
     IDoctorAvailabilityService doctorAvailabilityService;
 
-    @GetMapping("/{id}")
     @Override
-    public ResponseEntity<DtoDoctorAvailability> getDoctorAvailability(@PathVariable(name = "id") String doctorTc,
-            @RequestParam Date date) {
-        DtoDoctorAvailability availabilities = doctorAvailabilityService.getDoctorAvailability(doctorTc, date);
+    @GetMapping("/times")
+    public ResponseEntity<DtoDoctorAvailability> getDoctorAvailability(@RequestParam Date date) {
+        DtoDoctorAvailability availabilities = doctorAvailabilityService.getDoctorAvailability(date);
         return ResponseEntity.ok(availabilities);
     }
 
