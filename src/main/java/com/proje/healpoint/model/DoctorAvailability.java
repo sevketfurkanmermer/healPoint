@@ -15,7 +15,6 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DoctorAvailability {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,5 +24,4 @@ public class DoctorAvailability {
     @OneToOne()
     @JoinColumn(name = "doctor_tc", nullable = false)
     private Doctors doctor;
-
 }
