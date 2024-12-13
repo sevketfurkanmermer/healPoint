@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -24,8 +22,6 @@ public class Doctors extends User {
     private String district;
     private String address;
     private Double avgPoint;
-    private LocalTime workingHoursStart; 
-    private LocalTime workingHoursEnd;
 
     @ManyToMany
     @JoinTable(name="Doctor_patient",
@@ -38,4 +34,6 @@ public class Doctors extends User {
     private List<Appointments> appointments;
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reviews> reviews;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    private DoctorAvailability availability;
 }

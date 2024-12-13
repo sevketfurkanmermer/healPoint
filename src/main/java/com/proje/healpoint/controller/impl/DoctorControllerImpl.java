@@ -32,7 +32,7 @@ public class DoctorControllerImpl implements IDoctorController {
     @DeleteMapping("/delete/{id}")
     public void deleteDoctorById(@PathVariable(name = "id") String doctorTc) {
         doctorService.deleteDoctorById(doctorTc);
-    }
+    }   
 
     @Override
     @PostMapping("/save")
@@ -42,7 +42,7 @@ public class DoctorControllerImpl implements IDoctorController {
 
     @Override
     @PutMapping(path="/{id}")
-    public DtoDoctor updateDoctorById(DtoDoctorIU dtoDoctorIU, @PathVariable(name = "id") String doctorTc) {
+    public DtoDoctor updateDoctorById(@RequestBody DtoDoctorIU dtoDoctorIU, @PathVariable(name = "id") String doctorTc) {
         return doctorService.updateDoctor(doctorTc, dtoDoctorIU);
     }
 }

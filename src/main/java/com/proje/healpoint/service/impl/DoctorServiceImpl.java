@@ -75,8 +75,6 @@ public class DoctorServiceImpl implements IDoctorService {
         doctor.setCity(dtoDoctorIU.getCity());
         doctor.setAddress(dtoDoctorIU.getAddress());
         doctor.setDistrict(dtoDoctorIU.getDistrict());
-        doctor.setWorkingHoursStart(dtoDoctorIU.getWorkingHoursStart());
-        doctor.setWorkingHoursEnd(dtoDoctorIU.getWorkingHoursEnd());
         String encodedPassword=passwordEncoder.encode(dtoDoctorIU.getPassword());
         doctor.setPassword(encodedPassword);
         Doctors createdDoctor = doctorRepository.save(doctor);
@@ -104,8 +102,6 @@ public class DoctorServiceImpl implements IDoctorService {
             doctor.setAddress(doctorForUpdate.getAddress());
             doctor.setAbout(doctorForUpdate.getAbout());
             doctor.setGender(doctorForUpdate.getGender());
-            doctor.setWorkingHoursStart(doctorForUpdate.getWorkingHoursStart());
-            doctor.setWorkingHoursEnd(doctorForUpdate.getWorkingHoursEnd());
             Doctors updatedDoctor = doctorRepository.save(doctor);
             BeanUtils.copyProperties(updatedDoctor,dtoDoctor);
             return dtoDoctor;
