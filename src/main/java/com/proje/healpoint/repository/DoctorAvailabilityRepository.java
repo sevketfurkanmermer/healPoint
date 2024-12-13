@@ -7,5 +7,7 @@ import com.proje.healpoint.model.DoctorAvailability;
 
 @Repository
 public interface DoctorAvailabilityRepository extends JpaRepository<DoctorAvailability,Long> {
+
+    public DoctorAvailability findByDoctor_Tc(String doctorTC);
     
 }
