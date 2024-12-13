@@ -16,7 +16,5 @@ public class DtoDoctor extends DtoUser {
     private String district;
     private String address;
     private double avgPoint;
-    private LocalTime workingHoursStart;
-    private LocalTime workingHoursEnd;
 
 }
