@@ -39,7 +39,6 @@ public class DoctorAvailabilityServiceImpl implements IDoctorAvailabilityService
     public DtoDoctorAvailability saveDoctorAvailability(DtoDoctorAvailabilityIU doctorAvailabilityIU) {
         String tc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        // Doktoru bul
         Doctors doctor = doctorRepository.findById(tc)
                 .orElseThrow(() -> new BaseException(
                         new ErrorMessage(MessageType.NO_RECORD_EXIST, "Doctor not found: " + tc)));
@@ -86,11 +85,11 @@ public class DoctorAvailabilityServiceImpl implements IDoctorAvailabilityService
 
     }
 
-    public DtoDoctorAvailability getDoctorAvailability(Date date) {
+    public DtoDoctorAvailability getDoctorAvailability(String doctorId,Date date) {
         String tc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Doctors doctor = doctorRepository.findById(tc)
+        Doctors doctor = doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new BaseException(
-                        new ErrorMessage(MessageType.NO_RECORD_EXIST, tc)));
+                        new ErrorMessage(MessageType.NO_RECORD_EXIST, doctorId)));
 
         DoctorAvailability availability = doctor.getAvailability();
         if (availability == null) {
@@ -140,5 +139,5 @@ public class DoctorAvailabilityServiceImpl implements IDoctorAvailabilityService
     private boolean isSlotAvailable(Doctors doctor, Date date, String time) {
         return !appointmentRepository.existsByDoctorAndAppointmentDateAndAppointmentTime(doctor, date, time);
     }
-
+    
 }
