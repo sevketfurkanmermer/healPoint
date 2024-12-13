@@ -14,5 +14,5 @@ public interface IDoctorAvailabailityController {
     public ResponseEntity<DtoDoctorAvailability> getDoctorAvailability(@PathVariable(name = "id") String doctorTc,
             @RequestParam Date date);
     public DtoDoctorAvailability saveDoctorAvailability(@RequestBody DtoDoctorAvailabilityIU dtoDoctorAvailabilityIU);
-    public DtoDoctorAvailability saveDoctorAvailability(@RequestBody DtoDoctorAvailabilityIU dtoDoctorAvailabilityIU, @PathVariable(name = "id") Long id);
+    public DtoDoctorAvailability updateDoctorAvailability(@RequestBody DtoDoctorAvailabilityIU dtoDoctorAvailabilityIU, @PathVariable(name = "id") Long id);
 }

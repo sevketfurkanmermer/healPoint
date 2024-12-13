@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.proje.healpoint.dto.DtoDoctorAvailability;
@@ -36,6 +37,7 @@ public class DoctorAvailabilityServiceImpl implements IDoctorAvailabilityService
 
     @Override
     public DtoDoctorAvailability saveDoctorAvailability(DtoDoctorAvailabilityIU doctorAvailabilityIU) {
+        String tc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         DtoDoctorAvailability dtoDoctorAvailability = new DtoDoctorAvailability();
         DoctorAvailability availability = new DoctorAvailability();
         BeanUtils.copyProperties(doctorAvailabilityIU, availability);
@@ -46,6 +48,8 @@ public class DoctorAvailabilityServiceImpl implements IDoctorAvailabilityService
 
     @Override
     public DtoDoctorAvailability updateDoctorWorkTimes(Long id, DtoDoctorAvailabilityIU doctorAvailabilityIU) {
+
+        String tc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         DtoDoctorAvailability dtoDoctorAvailability = new DtoDoctorAvailability();
 
@@ -63,6 +67,7 @@ public class DoctorAvailabilityServiceImpl implements IDoctorAvailabilityService
     }
 
     public DtoDoctorAvailability getDoctorAvailability(String doctorId, Date date) {
+        String tc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Doctors doctor = doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new BaseException(
                         new ErrorMessage(MessageType.NO_RECORD_EXIST, doctorId)));
@@ -85,6 +90,9 @@ public class DoctorAvailabilityServiceImpl implements IDoctorAvailabilityService
     
 
     public List<LocalTime> getAvailableTimes(Doctors doctor, Date date) {
+
+        String tc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        
         DoctorAvailability availability = doctor.getAvailability();
         if (availability == null) {
             throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Doctor availability not found"));

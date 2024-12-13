@@ -4,13 +4,7 @@ import java.sql.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.proje.healpoint.controller.IDoctorAvailabailityController;
 import com.proje.healpoint.dto.DtoDoctorAvailability;
@@ -18,7 +12,7 @@ import com.proje.healpoint.dto.DtoDoctorAvailabilityIU;
 import com.proje.healpoint.service.IDoctorAvailabilityService;
 
 @RestController
-@RequestMapping(path="/api/doctor/availability")
+@RequestMapping(path="/api/v1/doctor/availability")
 public class DoctorAvailabilityControllerImpl implements IDoctorAvailabailityController {
 
     @Autowired
@@ -39,8 +33,8 @@ public class DoctorAvailabilityControllerImpl implements IDoctorAvailabailityCon
     }
 
     @Override
-    @PostMapping("/update/{id}")
-    public DtoDoctorAvailability saveDoctorAvailability(@RequestBody DtoDoctorAvailabilityIU dtoDoctorAvailabilityIU, @PathVariable(name = "id") Long id) {
+    @PutMapping("/update/{id}")
+    public DtoDoctorAvailability updateDoctorAvailability(@RequestBody DtoDoctorAvailabilityIU dtoDoctorAvailabilityIU, @PathVariable(name = "id") Long id) {
         return doctorAvailabilityService.updateDoctorWorkTimes(id, dtoDoctorAvailabilityIU);
     }
 
