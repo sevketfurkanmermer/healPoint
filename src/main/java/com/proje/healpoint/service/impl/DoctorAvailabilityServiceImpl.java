@@ -41,7 +41,9 @@ public class DoctorAvailabilityServiceImpl implements IDoctorAvailabilityService
         DtoDoctorAvailability dtoDoctorAvailability = new DtoDoctorAvailability();
         DoctorAvailability availability = new DoctorAvailability();
         BeanUtils.copyProperties(doctorAvailabilityIU, availability);
+
         DoctorAvailability savedAvailability = repository.save(availability);
+
         BeanUtils.copyProperties(savedAvailability, dtoDoctorAvailability);
         return dtoDoctorAvailability;
     }
@@ -59,6 +61,7 @@ public class DoctorAvailabilityServiceImpl implements IDoctorAvailabilityService
             throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, id.toString()));
         }
         DoctorAvailability availability = optionalAvailability.get();
+        BeanUtils.copyProperties(doctorAvailabilityIU,availability);
         DoctorAvailability updatedAvailability = repository.save(availability);
         BeanUtils.copyProperties(updatedAvailability, dtoDoctorAvailability);
         return dtoDoctorAvailability;
@@ -67,7 +70,7 @@ public class DoctorAvailabilityServiceImpl implements IDoctorAvailabilityService
 
     public DtoDoctorAvailability getDoctorAvailability(String doctorId, Date date) {
         String tc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Doctors doctor = doctorRepository.findById(doctorId)
+        Doctors doctor = doctorRepository.findById(tc)
                 .orElseThrow(() -> new BaseException(
                         new ErrorMessage(MessageType.NO_RECORD_EXIST, doctorId)));
     
@@ -75,7 +78,6 @@ public class DoctorAvailabilityServiceImpl implements IDoctorAvailabilityService
         if (availability == null) {
             throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Doctor availability not found"));
         }
-    
         List<LocalTime> availableTimes = getAvailableTimes(doctor, date);
     
         DtoDoctorAvailability dto = new DtoDoctorAvailability();

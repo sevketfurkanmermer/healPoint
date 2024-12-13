@@ -2,6 +2,7 @@ package com.proje.healpoint.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import com.proje.healpoint.model.Doctors;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,4 +20,5 @@ public class DtoDoctorAvailability {
     private List<LocalTime> availableTimes;
     private LocalTime workingHoursStart;
     private LocalTime workingHoursEnd;
+
 }

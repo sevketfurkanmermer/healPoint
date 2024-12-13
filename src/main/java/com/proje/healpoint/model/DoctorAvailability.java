@@ -22,4 +22,8 @@ public class DoctorAvailability {
     
     private LocalTime workingHoursStart;
     private LocalTime workingHoursEnd;
+    @OneToOne()
+    @JoinColumn(name = "doctor_tc", nullable = false)
+    private Doctors doctor;
+
 }

@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class DtoDoctorAvailabilityIU {
     private LocalTime workingHoursStart;
     private LocalTime workingHoursEnd;
+
 }
