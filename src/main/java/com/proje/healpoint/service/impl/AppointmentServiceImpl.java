@@ -103,11 +103,8 @@ public class AppointmentServiceImpl implements IAppointmentService {
 
         for (Appointments appointment : activeAppointments) {
             try {
-                LocalDate appointmentDate = appointment.getAppointmentDate().toInstant()
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDate(); //
-                LocalTime appointmentTime = LocalTime.parse(appointment.getAppointmentTime());
-                LocalDateTime appointmentDateTime = LocalDateTime.of(appointmentDate, appointmentTime);
+                LocalDate appointmentDate = appointment.getAppointmentDate();
+                LocalDateTime appointmentDateTime = LocalDateTime.of(appointmentDate, appointment.getAppointmentTime());
 
                 if (appointmentDateTime.isBefore(twoDaysLater) && appointmentDateTime.isAfter(now)) {
 

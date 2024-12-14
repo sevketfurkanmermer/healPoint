@@ -1,6 +1,7 @@
 package com.proje.healpoint.controller.impl;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class DoctorAvailabilityControllerImpl implements IDoctorAvailabailityCon
     @Override
     @GetMapping("/times/{id}")
     public ResponseEntity<DtoDoctorAvailability> getDoctorAvailability(@PathVariable(name = "id") String doctorTc,
-            @RequestParam Date date) {
+            @RequestParam LocalDate date) {
         DtoDoctorAvailability availabilities = doctorAvailabilityService.getDoctorAvailability(doctorTc, date);
         return ResponseEntity.ok(availabilities);
     }

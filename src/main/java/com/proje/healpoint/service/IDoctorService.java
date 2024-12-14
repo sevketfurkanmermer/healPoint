@@ -6,7 +6,6 @@ import com.proje.healpoint.dto.DtoDoctorIU;
 import java.util.List;
 
 public interface IDoctorService {
-
     public List<DtoDoctor> getAllDoctors();
     public DtoDoctor getDoctorById(String id);
     public void deleteDoctorById(String id);
