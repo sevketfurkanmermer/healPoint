@@ -1,6 +1,7 @@
 package com.proje.healpoint.service.impl;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +58,6 @@ public class DoctorAvailabilityServiceImpl implements IDoctorAvailabilityService
 
         DoctorAvailability savedAvailability = repository.save(availability);
 
-        // DTO'ya dönüştür
         DtoDoctorAvailability dtoDoctorAvailability = new DtoDoctorAvailability();
         BeanUtils.copyProperties(savedAvailability, dtoDoctorAvailability);
 
@@ -85,7 +85,7 @@ public class DoctorAvailabilityServiceImpl implements IDoctorAvailabilityService
 
     }
 
-    public DtoDoctorAvailability getDoctorAvailability(String doctorId,Date date) {
+    public DtoDoctorAvailability getDoctorAvailability(String doctorId,LocalDate date) {
         String tc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Doctors doctor = doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new BaseException(
@@ -106,7 +106,7 @@ public class DoctorAvailabilityServiceImpl implements IDoctorAvailabilityService
         return dto;
     }
 
-    public List<LocalTime> getAvailableTimes(Doctors doctor, Date date) {
+    public List<LocalTime> getAvailableTimes(Doctors doctor, LocalDate date) {
         DoctorAvailability availability = doctor.getAvailability();
         if (availability == null) {
             throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Doctor availability not found"));
@@ -116,7 +116,6 @@ public class DoctorAvailabilityServiceImpl implements IDoctorAvailabilityService
         LocalTime end = availability.getWorkingHoursEnd();
 
         List<LocalTime> availableTimes = new ArrayList<>();
-
         boolean hasAppointments = appointmentRepository.existsByDoctorAndAppointmentDate(doctor, date);
         if (!hasAppointments) {
             while (start.isBefore(end)) {
@@ -127,7 +126,7 @@ public class DoctorAvailabilityServiceImpl implements IDoctorAvailabilityService
         }
 
         while (start.isBefore(end)) {
-            if (isSlotAvailable(doctor, date, start.toString())) {
+            if (isSlotAvailable(doctor, date, start)) {
                 availableTimes.add(start);
             }
             start = start.plusHours(1);
@@ -136,7 +135,7 @@ public class DoctorAvailabilityServiceImpl implements IDoctorAvailabilityService
         return availableTimes;
     }
 
-    private boolean isSlotAvailable(Doctors doctor, Date date, String time) {
+    private boolean isSlotAvailable(Doctors doctor, LocalDate date, LocalTime time) {
         return !appointmentRepository.existsByDoctorAndAppointmentDateAndAppointmentTime(doctor, date, time);
     }
     

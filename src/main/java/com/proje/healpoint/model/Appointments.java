@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 
 @Entity
@@ -25,10 +27,10 @@ public class Appointments {
     private Long appointmentId;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date appointmentDate;
+    private LocalDate appointmentDate;
 
     @Column(nullable = false)
-    private String appointmentTime;
+    private LocalTime appointmentTime;
 
     @Enumerated(EnumType.STRING)
     private AppointmentStatus appointmentStatus;

@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class DtoDoctorAvailability {
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date availableDate;
+    private LocalDate availableDate;
     private List<LocalTime> availableTimes;
     private LocalTime workingHoursStart;
     private LocalTime workingHoursEnd;
