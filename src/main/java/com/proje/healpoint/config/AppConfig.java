@@ -1,7 +1,9 @@
 package com.proje.healpoint.config;
 
+import com.proje.healpoint.model.Admin;
 import com.proje.healpoint.model.Doctors;
 import com.proje.healpoint.model.Patients;
+import com.proje.healpoint.repository.AdminRepository;
 import com.proje.healpoint.repository.DoctorRepository;
 import com.proje.healpoint.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,8 @@ public class AppConfig {
     private PatientRepository patientRepository;
     @Autowired
     private DoctorRepository doctorRepository;
+    @Autowired
+    private AdminRepository adminRepository;
     @Bean
     public UserDetailsService userDetailsService() {
        return new UserDetailsService() {
@@ -46,8 +50,18 @@ public class AppConfig {
                             doctor.getPassword(),
                             new ArrayList<>()
                     );
+
                 }
-                return null;
+                Optional<Admin> optionalAdmin = adminRepository.findByUsername(userName);
+                if (optionalAdmin.isPresent()) {
+                    Admin admin = optionalAdmin.get();
+                    return new User(
+                            admin.getUsername(),
+                            admin.getPassword(),
+                            new ArrayList<>()
+                    );
+                }
+                throw new UsernameNotFoundException(userName);
             }
         };
     }

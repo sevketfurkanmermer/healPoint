@@ -13,7 +13,8 @@ public enum MessageType {
     INVALID_USER_TYPE           ("1007","Geçersiz kullanıcı tipi:"),
     APPOINTMENT_ALREADY_EXISTS  ("1008","Bu randevu dolu! Başka saat ya da tarih seçiniz."),
     UNAUTHORIZED                ("1009","Bu randevu size ait değil!"),
-    REVIEW_ALREADY_EXISTS       ("1010","Bu randevu için değerlendirme zaten yapılmış.");
+    REVIEW_ALREADY_EXISTS       ("1010","Bu randevu için değerlendirme zaten yapılmış."),
+    DUPLICATE_RECORD            ("1011","Hata");
 
     private String code;
     private String message;

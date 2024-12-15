@@ -2,32 +2,35 @@ package com.proje.healpoint.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "subscription_plan")
-@Data
+@Table(name = "admin")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SubscriptionPlan {
-
-    //ADMİN OLUŞTURUR
-
+public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
-    private String name;
-    @Column(nullable = false)
-    private BigDecimal price;
-    @Column(nullable = false)
-    private Integer durationInMonths;
 
+    @Column(nullable = false,unique = true)
+    private String username;
+    @Column(nullable = false)
+    private String password;
+    @Column(nullable = false)
+    private String role = "ADMIN";
     @CreationTimestamp
     private LocalDateTime createdAt;
+
+    public Admin(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 }

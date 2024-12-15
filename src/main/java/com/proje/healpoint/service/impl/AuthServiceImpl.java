@@ -6,8 +6,10 @@ import com.proje.healpoint.exception.MessageType;
 import com.proje.healpoint.jwt.AuthRequest;
 import com.proje.healpoint.jwt.AuthResponse;
 import com.proje.healpoint.jwt.JwtService;
+import com.proje.healpoint.model.Admin;
 import com.proje.healpoint.model.Doctors;
 import com.proje.healpoint.model.Patients;
+import com.proje.healpoint.repository.AdminRepository;
 import com.proje.healpoint.repository.DoctorRepository;
 import com.proje.healpoint.repository.PatientRepository;
 import com.proje.healpoint.service.IAuthService;
@@ -29,6 +31,8 @@ public class AuthServiceImpl implements IAuthService {
     private PatientRepository patientRepository;
     @Autowired
     private DoctorRepository doctorRepository;
+    @Autowired
+    private AdminRepository adminRepository;
 
 
     @Override
@@ -47,6 +51,7 @@ public class AuthServiceImpl implements IAuthService {
                             new ErrorMessage(MessageType.NO_RECORD_EXIST, "Hasta bulunamadı: " + authRequest.getUsername()));
                 }
                 token = jwtService.generateToken(authRequest.getUsername(), "PATIENT");
+
             } else if (authRequest.getUserType().equalsIgnoreCase("DOCTOR")) {
                 // Doktor için doğrulama
                 Optional<Doctors> optionalDoctor = doctorRepository.findById(authRequest.getUsername());
@@ -55,6 +60,16 @@ public class AuthServiceImpl implements IAuthService {
                             new ErrorMessage(MessageType.NO_RECORD_EXIST, "Doktor bulunamadı: " + authRequest.getUsername()));
                 }
                 token = jwtService.generateToken(authRequest.getUsername(), "DOCTOR");
+
+            } else if (authRequest.getUserType().equalsIgnoreCase("ADMIN")) {
+                // Admin için doğrulama
+                Optional<Admin> optionalAdmin = adminRepository.findByUsername(authRequest.getUsername());
+                if (optionalAdmin.isEmpty()) {
+                    throw new BaseException(
+                            new ErrorMessage(MessageType.NO_RECORD_EXIST, "Admin bulunamadı: " + authRequest.getUsername()));
+                }
+                token = jwtService.generateToken(authRequest.getUsername(), "ADMIN");
+
             } else {
                 throw new BaseException(
                         new ErrorMessage(MessageType.INVALID_USER_TYPE, authRequest.getUserType()));
