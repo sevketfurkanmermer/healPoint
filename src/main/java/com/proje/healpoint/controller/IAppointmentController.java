@@ -8,4 +8,5 @@ import java.util.List;
 public interface IAppointmentController {
     public ResponseEntity<DtoAppointment> createAppointment(DtoAppointment dtoAppointment);
     public ResponseEntity<List<DtoAppointment>> getUpcomingAppointments();
+    public ResponseEntity<List<DtoAppointment>> getCompletedAndCancelledAppointments();
 }

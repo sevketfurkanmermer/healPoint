@@ -9,4 +9,5 @@ public interface IAppointmentService {
     public DtoAppointment createAppointment(DtoAppointment dtoAppointment);
 
     public List<DtoAppointment> getUpcomingAppointments();
+    public List<DtoAppointment> getCompletedAndCancelledAppointments();
 }

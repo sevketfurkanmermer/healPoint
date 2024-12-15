@@ -25,6 +25,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AppointmentServiceImpl implements IAppointmentService {
@@ -53,7 +54,6 @@ public class AppointmentServiceImpl implements IAppointmentService {
         if (doctors.isEmpty()) {
             errorMessages.add("Doktor Tc: " + dtoAppointment.getDoctorTc());
         }
-
         if (!errorMessages.isEmpty()) {
             throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, String.join(" - ", errorMessages)));
         }
@@ -68,16 +68,13 @@ public class AppointmentServiceImpl implements IAppointmentService {
                     new ErrorMessage(MessageType.APPOINTMENT_ALREADY_EXISTS,
                             "Bu doktor için belirtilen tarih ve saat zaten dolu."));
         }
-
         Appointments appointments = new Appointments();
         BeanUtils.copyProperties(dtoAppointment, appointments);
         appointments.setPatient(patients.get());
         appointments.setDoctor(doctors.get());
         Appointments savedAppointment = appointmentRepository.save(appointments);
-
         DtoAppointment response = new DtoAppointment();
         BeanUtils.copyProperties(savedAppointment, response);
-
         DtoDoctorReview dtoDoctor = new DtoDoctorReview();
         dtoDoctor.setDoctorName(savedAppointment.getDoctor().getName());
         dtoDoctor.setDoctorSurname(savedAppointment.getDoctor().getSurname());
@@ -85,9 +82,7 @@ public class AppointmentServiceImpl implements IAppointmentService {
         dtoDoctor.setCity(savedAppointment.getDoctor().getCity());
         dtoDoctor.setEmail(savedAppointment.getDoctor().getEmail());
         response.setDoctor(dtoDoctor);
-
         response.setPatientTc(savedAppointment.getPatient().getTc());
-
         return response;
     }
 
@@ -114,6 +109,7 @@ public class AppointmentServiceImpl implements IAppointmentService {
                     dtoAppointment.setAppointmentTime(appointment.getAppointmentTime());
                     dtoAppointment.setAppointmentStatus(appointment.getAppointmentStatus());
                     dtoAppointment.setAppointmentText(appointment.getAppointmentText());
+                    dtoAppointment.setPatientTc(patientTc);
 
                     DtoDoctorReview dtoDoctor = new DtoDoctorReview();
                     dtoDoctor.setDoctorName(appointment.getDoctor().getName());
@@ -130,6 +126,35 @@ public class AppointmentServiceImpl implements IAppointmentService {
             }
         }
         return upcomingAppointments;
+    }
+    public List<DtoAppointment> getCompletedAndCancelledAppointments() {
+        String patientTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Patients patient = patientRepository.findById(patientTc)
+                .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Hasta bulunamadı")));
+
+        List<AppointmentStatus> statuses = List.of(AppointmentStatus.TAMAMLANDI, AppointmentStatus.İPTAL);
+        List<Appointments> appointmentsList = appointmentRepository.findByPatient_TcAndAppointmentStatusIn(patientTc, statuses);
+        List<DtoAppointment> dtoAppointments = new ArrayList<>();
+
+        for (Appointments appointment : appointmentsList) {
+            DtoAppointment dto = new DtoAppointment();
+            BeanUtils.copyProperties(appointment, dto);
+            if (appointment.getDoctor() != null) {
+                DtoDoctorReview dtoDoctor = new DtoDoctorReview();
+                dtoDoctor.setDoctorName(appointment.getDoctor().getName());
+                dtoDoctor.setDoctorSurname(appointment.getDoctor().getSurname());
+                dtoDoctor.setBranch(appointment.getDoctor().getBranch());
+                dtoDoctor.setCity(appointment.getDoctor().getCity());
+                dtoDoctor.setEmail(appointment.getDoctor().getEmail());
+                dto.setDoctor(dtoDoctor);
+            }
+            if (appointment.getPatient() != null) {
+                dto.setPatientTc(appointment.getPatient().getTc());
+            }
+            dtoAppointments.add(dto);
+        }
+        return dtoAppointments;
     }
 
 }

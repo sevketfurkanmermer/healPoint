@@ -36,4 +36,10 @@ public class AppointmentControllerImpl implements IAppointmentController {
         return ResponseEntity.ok(appointments);
     }
 
+    @GetMapping("/completed-and-cancelled")
+    public ResponseEntity<List<DtoAppointment>> getCompletedAndCancelledAppointments() {
+        List<DtoAppointment> appointments = appointmentService.getCompletedAndCancelledAppointments();
+        return ResponseEntity.ok(appointments);
+
+    }
 }

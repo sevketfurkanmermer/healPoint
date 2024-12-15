@@ -1,6 +1,5 @@
 package com.proje.healpoint.model;
 
-import com.proje.healpoint.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,14 +17,21 @@ import java.time.LocalDateTime;
 public class Payments {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Payment_id;
-    private BigDecimal Amount;
-    @Enumerated(EnumType.STRING)
-    private PaymentStatus Status;
-    @CreationTimestamp
-    private LocalDateTime createdAt;
+    private Long PaymentId;
 
     @ManyToOne
     @JoinColumn(name = "doctor_tc", nullable = false)
     private Doctors doctor;
+    @Column(nullable = false,length = 16)
+    private String cardNumber;
+    @Column(nullable = false)
+    private String cardHolderName;
+    @Column(nullable = false)
+    private BigDecimal amount;
+    @Column(nullable = false ,length = 3)
+    private String cvv;
+
+    private Boolean isSuccess;
+
+    private LocalDateTime createdTime;
 }

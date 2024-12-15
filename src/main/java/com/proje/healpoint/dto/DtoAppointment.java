@@ -30,5 +30,5 @@ public class DtoAppointment {
     private String doctorTc;
 
     private DtoDoctorReview doctor;
-    private List<DtoReview> reviews;
+
 }
