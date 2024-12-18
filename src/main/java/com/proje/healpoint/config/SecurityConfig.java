@@ -4,7 +4,9 @@ import com.proje.healpoint.jwt.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -23,11 +25,11 @@ public class SecurityConfig {
     private static final String AUTHENTICATE = "/authenticate";
     private static final String REGISTER_PATIENT = "/api/v1/patients/create";
     private static final String REGISTER_DOCTOR = "/api/v1/doctors/save";
-
+    private static final String LOGIN = "/login";
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .authorizeHttpRequests(request->request.requestMatchers(AUTHENTICATE,REGISTER_PATIENT,REGISTER_DOCTOR)
+                .authorizeHttpRequests(request->request.requestMatchers(AUTHENTICATE,REGISTER_PATIENT,REGISTER_DOCTOR,LOGIN)
                         .permitAll()
                         .anyRequest()
                         .authenticated())
@@ -38,5 +40,9 @@ public class SecurityConfig {
 
 
         return http.build();
+    }
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 }

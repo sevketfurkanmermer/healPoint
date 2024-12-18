@@ -14,6 +14,7 @@ import com.proje.healpoint.repository.DoctorRepository;
 import com.proje.healpoint.repository.PatientRepository;
 import com.proje.healpoint.service.IAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
@@ -33,6 +34,9 @@ public class AuthServiceImpl implements IAuthService {
     private DoctorRepository doctorRepository;
     @Autowired
     private AdminRepository adminRepository;
+    @Autowired
+    AuthenticationManager authenticationManager;
+
 
 
     @Override
@@ -81,6 +85,21 @@ public class AuthServiceImpl implements IAuthService {
             e.printStackTrace();
             throw new BaseException(
                     new ErrorMessage(MessageType.AUTHENTICATION_FAILED, authRequest.getUsername()));
+        }
+    }
+    public String login(String username, String password) {
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(username, password)
+            );
+
+
+            Patients patient = patientRepository.findById(username)
+                    .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Hasta bulunamadı")));
+
+            return jwtService.generateToken(patient.getTc(), "PATIENT");
+        } catch (Exception ex) {
+            throw new BaseException(new ErrorMessage(MessageType.AUTHENTICATION_FAILED, "Geçersiz TC veya şifre"));
         }
     }
 }

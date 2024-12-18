@@ -19,4 +19,5 @@ public interface PatientRepository extends JpaRepository<Patients, String> {
 
     boolean existsByEmailAndTcNot(String patientEmail, String patientTc);
     boolean existsByPhoneNumberAndTcNot(String patientPhoneNumber, String patientTc);
+    Optional <Patients >findByPhoneNumber(String username);
 }

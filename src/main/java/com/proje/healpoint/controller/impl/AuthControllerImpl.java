@@ -19,4 +19,11 @@ public class AuthControllerImpl implements IAuthController {
         AuthResponse response = authService.authenticate(authRequest);
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/login")
+    @Override
+    public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
+        String token = authService.login(authRequest.getUsername(), authRequest.getPassword());
+        return ResponseEntity.ok(new AuthResponse(token));
+    }
 }
