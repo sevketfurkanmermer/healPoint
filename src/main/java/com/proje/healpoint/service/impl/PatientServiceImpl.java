@@ -140,7 +140,6 @@ public class PatientServiceImpl implements IPatientService {
                 BeanUtils.copyProperties(appointment.getDoctor(), dtoDoctorReview);
                 dtoAppointment.setDoctor(dtoDoctorReview);
                 dtoAppointments.add(dtoAppointment);
-
             }
 
             dtoPatient.setAppointments(dtoAppointments);

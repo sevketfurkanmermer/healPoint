@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -17,7 +18,7 @@ import java.util.List;
 public class Patients extends User {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(nullable = false)
-    private Date birthDate;
+    private LocalDate birthDate;
 
 
     @ManyToMany(mappedBy = "patients")
