@@ -22,10 +22,10 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    private static final String AUTHENTICATE = "/authenticate";
+    private static final String AUTHENTICATE = "api/v1/authenticate";
     private static final String REGISTER_PATIENT = "/api/v1/patients/create";
     private static final String REGISTER_DOCTOR = "/api/v1/doctors/save";
-    private static final String LOGIN = "/login";
+    private static final String LOGIN = "api/v1/login";
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
