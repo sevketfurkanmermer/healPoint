@@ -32,7 +32,7 @@ public class DoctorControllerImpl implements IDoctorController {
     @DeleteMapping("/delete/{id}")
     public void deleteDoctorById(@PathVariable(name = "id") String doctorTc) {
         doctorService.deleteDoctorById(doctorTc);
-    }   
+    }  
 
     @Override
     @PostMapping("/save")
