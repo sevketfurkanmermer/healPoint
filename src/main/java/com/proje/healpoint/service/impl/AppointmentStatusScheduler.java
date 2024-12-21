@@ -22,7 +22,7 @@ public class AppointmentStatusScheduler {
         LocalTime now = LocalTime.now();
 
         List<Appointments> activeAppointments = appointmentRepository.findByAppointmentStatusAndAppointmentDateAndAppointmentTimeBefore(
-                AppointmentStatus.AKTİF, today, now);
+                AppointmentStatus.AKTIF, today, now);
 
         for (Appointments appointment : activeAppointments) {
             appointment.setAppointmentStatus(AppointmentStatus.TAMAMLANDI);

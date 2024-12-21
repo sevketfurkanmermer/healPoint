@@ -16,7 +16,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "Appointments", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"doctor_id", "appointment_date", "appointment_time"})
+        @UniqueConstraint(columnNames = {"doctor_tc", "appointment_date", "appointment_time"})
 })
 @Data
 @NoArgsConstructor

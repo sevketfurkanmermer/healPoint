@@ -99,7 +99,7 @@ public class AppointmentServiceImpl implements IAppointmentService {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime twoDaysLater = now.plusDays(2);
         String patientTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<Appointments> activeAppointments = appointmentRepository.findByPatient_TcAndAppointmentStatus(patientTc, AppointmentStatus.AKTİF);
+        List<Appointments> activeAppointments = appointmentRepository.findByPatient_TcAndAppointmentStatus(patientTc, AppointmentStatus.AKTIF);
 
         List<DtoAppointment> upcomingAppointments = new ArrayList<>();
 
@@ -144,7 +144,7 @@ public class AppointmentServiceImpl implements IAppointmentService {
         Patients patient = patientRepository.findById(patientTc)
                 .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Hasta bulunamadı")));
 
-        List<AppointmentStatus> statuses = List.of(AppointmentStatus.TAMAMLANDI, AppointmentStatus.İPTAL);
+        List<AppointmentStatus> statuses = List.of(AppointmentStatus.TAMAMLANDI, AppointmentStatus.IPTAL);
         List<Appointments> appointmentsList = appointmentRepository.findByPatient_TcAndAppointmentStatusIn(patientTc, statuses);
         List<DtoAppointment> dtoAppointments = new ArrayList<>();
 
