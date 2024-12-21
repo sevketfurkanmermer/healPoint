@@ -21,4 +21,5 @@ public class DtoDoctorAvailability {
     private List<LocalTime> availableTimes;
     private LocalTime workingHoursStart;
     private LocalTime workingHoursEnd;
+
 }
