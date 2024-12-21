@@ -12,4 +12,7 @@ public interface IAppointmentService {
     public List<DtoAppointment> getCompletedAndCancelledAppointments();
     public List<DtoAppointment> getAllAppointmentsByPatient();
     public List<DtoAppointment> getAllAppointmentsByDoctor();
+    public List<DtoAppointment> getActiveAppointments();
+    public List<DtoAppointment> getDoctorActiveAppointments();
+    public List<DtoAppointment> getDoctorCompletedAndCancelledAppointments();
 }

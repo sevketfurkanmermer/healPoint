@@ -226,5 +226,90 @@ public class AppointmentServiceImpl implements IAppointmentService {
         }
         return dtoAppointments;
     }
+    @Override
+    public List<DtoAppointment> getActiveAppointments() {
+        String patientTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Patients patient = patientRepository.findById(patientTc)
+                .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Hasta bulunamadı")));
+        List<Appointments> activeAppointments = appointmentRepository.findByPatientAndAppointmentStatusOrderByAppointmentDateAscAppointmentTimeAsc(patient, AppointmentStatus.AKTIF);
+        List<DtoAppointment> dtoAppointments = new ArrayList<>();
+        for (Appointments appointment : activeAppointments) {
+            dtoAppointments.add(convertToDto(appointment));
+        }
+        return dtoAppointments;
+    }
+    @Override
+    public List<DtoAppointment> getDoctorActiveAppointments() {
+        String doctorTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Doctors doctor = doctorRepository.findById(doctorTc)
+                .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Doktor bulunamadı")));
+        List<Appointments> activeAppointments = appointmentRepository.findByDoctorAndAppointmentStatusOrderByAppointmentDateAscAppointmentTimeAsc(doctor, AppointmentStatus.AKTIF);
+        List<DtoAppointment> dtoAppointments = new ArrayList<>();
+        for (Appointments appointment : activeAppointments) {
+            dtoAppointments.add(convertToDto(appointment));
+        }
+        return dtoAppointments;
+    }
+    private DtoAppointment convertToDto(Appointments appointment) {
+        DtoAppointment dto = new DtoAppointment();
+        dto.setAppointmentId(appointment.getAppointmentId());
+        dto.setAppointmentDate(appointment.getAppointmentDate());
+        dto.setAppointmentTime(appointment.getAppointmentTime());
+        dto.setAppointmentStatus(appointment.getAppointmentStatus());
+        dto.setAppointmentText(appointment.getAppointmentText());
+        if (appointment.getPatient() != null) {
+            DtoPatientReview dtoPatient = new DtoPatientReview();
+            dtoPatient.setPatientName(appointment.getPatient().getName());
+            dtoPatient.setPatientSurname(appointment.getPatient().getSurname());
+            dtoPatient.setPatientGender(appointment.getPatient().getGender());
+            dto.setPatient(dtoPatient);
+            dto.setPatientTc(appointment.getPatient().getTc());
+        }
+
+        if (appointment.getDoctor() != null) {
+            DtoDoctorReview dtoDoctor = new DtoDoctorReview();
+            dtoDoctor.setDoctorName(appointment.getDoctor().getName());
+            dtoDoctor.setDoctorSurname(appointment.getDoctor().getSurname());
+            dtoDoctor.setBranch(appointment.getDoctor().getBranch());
+            dtoDoctor.setCity(appointment.getDoctor().getCity());
+            dtoDoctor.setEmail(appointment.getDoctor().getEmail());
+            dto.setDoctor(dtoDoctor);
+        }
+        return dto;
+    }
+    @Override
+    public List<DtoAppointment> getDoctorCompletedAndCancelledAppointments() {
+
+        String doctorTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Doctors doctor = doctorRepository.findById(doctorTc)
+                .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Doktor bulunamadı")));
+
+        List<AppointmentStatus> statuses = List.of(AppointmentStatus.TAMAMLANDI, AppointmentStatus.IPTAL);
+        List<Appointments> appointmentsList = appointmentRepository.findByDoctorAndAppointmentStatusIn(doctor, statuses);
+        List<DtoAppointment> dtoAppointments = new ArrayList<>();
+        for (Appointments appointment : appointmentsList) {
+            DtoAppointment dto = new DtoAppointment();
+
+            dto.setAppointmentId(appointment.getAppointmentId());
+            dto.setAppointmentDate(appointment.getAppointmentDate());
+            dto.setAppointmentTime(appointment.getAppointmentTime());
+            dto.setAppointmentStatus(appointment.getAppointmentStatus());
+            dto.setAppointmentText(appointment.getAppointmentText());
+
+            if (appointment.getPatient() != null) {
+                DtoPatientReview dtoPatient = new DtoPatientReview();
+                dtoPatient.setPatientName(appointment.getPatient().getName());
+                dtoPatient.setPatientSurname(appointment.getPatient().getSurname());
+                dtoPatient.setPatientGender(appointment.getPatient().getGender());
+                dto.setPatient(dtoPatient);
+            }
+            dtoAppointments.add(dto);
+        }
+        dtoAppointments.sort(Comparator.comparing(DtoAppointment::getAppointmentDate)
+                .thenComparing(DtoAppointment::getAppointmentTime));
+        return dtoAppointments;
+    }
 
 }
