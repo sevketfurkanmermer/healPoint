@@ -174,5 +174,57 @@ public class AppointmentServiceImpl implements IAppointmentService {
         dtoAppointments.sort(Comparator.comparing(DtoAppointment::getAppointmentDate).thenComparing(DtoAppointment::getAppointmentTime));
         return dtoAppointments;
     }
+    @Override
+    public List<DtoAppointment> getAllAppointmentsByPatient() {
+        String patientTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Patients patient = patientRepository.findById(patientTc)
+                .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Hasta bulunamadı")));
+
+        List<Appointments> appointmentsList = appointmentRepository.findByPatientOrderByAppointmentDateAscAppointmentTimeAsc(patient);
+
+        List<DtoAppointment> dtoAppointments = new ArrayList<>();
+        for (Appointments appointment : appointmentsList) {
+            DtoAppointment dtoAppointment = new DtoAppointment();
+            BeanUtils.copyProperties(appointment, dtoAppointment);
+
+            if (appointment.getDoctor() != null) {
+                DtoDoctorReview dtoDoctor = new DtoDoctorReview();
+                dtoDoctor.setDoctorName(appointment.getDoctor().getName());
+                dtoDoctor.setDoctorSurname(appointment.getDoctor().getSurname());
+                dtoDoctor.setBranch(appointment.getDoctor().getBranch());
+                dtoDoctor.setCity(appointment.getDoctor().getCity());
+                dtoDoctor.setEmail(appointment.getDoctor().getEmail());
+                dtoAppointment.setDoctor(dtoDoctor);
+            }
+            dtoAppointments.add(dtoAppointment);
+        }
+        return dtoAppointments;
+    }
+    @Override
+    public List<DtoAppointment> getAllAppointmentsByDoctor() {
+        String doctorTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Doctors doctor = doctorRepository.findById(doctorTc)
+                .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Doktor bulunamadı")));
+
+        List<Appointments> appointmentsList = appointmentRepository.findByDoctorOrderByAppointmentDateAscAppointmentTimeAsc(doctor);
+
+        List<DtoAppointment> dtoAppointments = new ArrayList<>();
+
+        for (Appointments appointment : appointmentsList) {
+            DtoAppointment dtoAppointment = new DtoAppointment();
+            BeanUtils.copyProperties(appointment, dtoAppointment);
+            if (appointment.getPatient() != null) {
+                DtoPatientReview dtoPatient = new DtoPatientReview();
+                dtoPatient.setPatientName(appointment.getPatient().getName());
+                dtoPatient.setPatientSurname(appointment.getPatient().getSurname());
+                dtoPatient.setPatientGender(appointment.getPatient().getGender());
+                dtoAppointment.setPatient(dtoPatient);
+            }
+            dtoAppointments.add(dtoAppointment);
+        }
+        return dtoAppointments;
+    }
 
 }

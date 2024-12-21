@@ -102,5 +102,19 @@ public class AuthServiceImpl implements IAuthService {
             throw new BaseException(new ErrorMessage(MessageType.AUTHENTICATION_FAILED, "Geçersiz TC veya şifre"));
         }
     }
+    @Override
+    public String loginAsDoctor(String username, String password) {
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(username, password)
+            );
+            Doctors doctor = doctorRepository.findById(username)
+                    .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Doktor bulunamadı")));
+
+            return jwtService.generateToken(doctor.getTc(), "DOCTOR");
+        } catch (Exception ex) {
+            throw new BaseException(new ErrorMessage(MessageType.AUTHENTICATION_FAILED, "Geçersiz TC veya şifre"));
+        }
+    }
 }
 

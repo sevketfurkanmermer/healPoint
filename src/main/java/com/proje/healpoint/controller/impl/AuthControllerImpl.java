@@ -28,4 +28,11 @@ public class AuthControllerImpl implements IAuthController {
         String token = authService.login(authRequest.getUsername(), authRequest.getPassword());
         return ResponseEntity.ok(new AuthResponse(token));
     }
+
+    @PostMapping("/login-doctor")
+    @Override
+    public ResponseEntity<?> loginAsDoctor(@RequestBody AuthRequest authRequest) {
+        String token = authService.loginAsDoctor(authRequest.getUsername(), authRequest.getPassword());
+        return ResponseEntity.ok(new AuthResponse(token));
+    }
 }

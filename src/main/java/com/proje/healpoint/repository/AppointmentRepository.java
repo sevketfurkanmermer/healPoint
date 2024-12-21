@@ -4,6 +4,7 @@ import com.proje.healpoint.enums.AppointmentStatus;
 import com.proje.healpoint.model.Appointments;
 import com.proje.healpoint.model.Doctors;
 
+import com.proje.healpoint.model.Patients;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -31,5 +32,7 @@ public interface AppointmentRepository extends JpaRepository<Appointments, Long>
 
         List<Appointments> findByAppointmentStatusAndAppointmentDateAndAppointmentTimeBefore(
                 AppointmentStatus status, LocalDate date, LocalTime time);
+        List<Appointments> findByPatientOrderByAppointmentDateAscAppointmentTimeAsc(Patients patient);
+        List<Appointments> findByDoctorOrderByAppointmentDateAscAppointmentTimeAsc(Doctors doctor);
 }
 

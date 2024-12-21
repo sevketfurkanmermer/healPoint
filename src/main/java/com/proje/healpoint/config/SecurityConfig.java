@@ -26,10 +26,15 @@ public class SecurityConfig {
     private static final String REGISTER_PATIENT = "/api/v1/patients/create";
     private static final String REGISTER_DOCTOR = "/api/v1/doctors/save";
     private static final String LOGIN = "api/v1/login";
+    private static final String LOGIN_DOCTOR = "api/v1/login-doctor";
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .authorizeHttpRequests(request->request.requestMatchers(AUTHENTICATE,REGISTER_PATIENT,REGISTER_DOCTOR,LOGIN)
+                .authorizeHttpRequests(request->request.requestMatchers(AUTHENTICATE,
+                                REGISTER_PATIENT,
+                                REGISTER_DOCTOR,
+                                LOGIN,
+                                LOGIN_DOCTOR)
                         .permitAll()
                         .anyRequest()
                         .authenticated())

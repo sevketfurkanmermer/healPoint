@@ -5,10 +5,9 @@ import com.proje.healpoint.dto.DtoReview;
 import com.proje.healpoint.service.IReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(path="/api/v1/review")
@@ -20,5 +19,19 @@ public class ReviewControllerImpl implements IReviewController {
     public ResponseEntity<DtoReview> createReview(@RequestBody DtoReview dtoReview) {
         DtoReview response = reviewService.createReview(dtoReview);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/list-doctor")
+    @Override
+    public ResponseEntity<List<DtoReview>> getDoctorReviews() {
+        List<DtoReview> reviews = reviewService.getDoctorReviews();
+        return ResponseEntity.ok(reviews);
+    }
+
+    @GetMapping("/list-patient")
+    @Override
+    public ResponseEntity<List<DtoReview>> getPatientReviews() {
+        List<DtoReview> myReviews = reviewService.getPatientReviews();
+        return ResponseEntity.ok(myReviews);
     }
 }

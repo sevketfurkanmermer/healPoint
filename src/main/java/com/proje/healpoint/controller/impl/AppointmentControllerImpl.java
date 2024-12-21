@@ -42,4 +42,16 @@ public class AppointmentControllerImpl implements IAppointmentController {
         return ResponseEntity.ok(appointments);
 
     }
+    @GetMapping("/list-patient")
+    @Override
+    public ResponseEntity<List<DtoAppointment>> getAllAppointmentsByPatient() {
+        List<DtoAppointment> appointments = appointmentService.getAllAppointmentsByPatient();
+        return ResponseEntity.ok(appointments);
+    }
+    @GetMapping("/list-doctor")
+    @Override
+    public ResponseEntity<List<DtoAppointment>> getAllAppointmentsByDoctor() {
+        List<DtoAppointment> appointments = appointmentService.getAllAppointmentsByDoctor();
+        return ResponseEntity.ok(appointments);
+    }
 }

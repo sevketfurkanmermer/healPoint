@@ -14,12 +14,16 @@ import com.proje.healpoint.model.Patients;
 import com.proje.healpoint.model.Reviews;
 import com.proje.healpoint.repository.AppointmentRepository;
 import com.proje.healpoint.repository.DoctorRepository;
+import com.proje.healpoint.repository.PatientRepository;
 import com.proje.healpoint.repository.ReviewRepository;
 import com.proje.healpoint.service.IReviewService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,6 +34,8 @@ public class ReviewServiceImpl implements IReviewService {
     private AppointmentRepository appointmentRepository;
     @Autowired
     private DoctorRepository doctorRepository;
+    @Autowired
+    private PatientRepository patientRepository;
     @Override
     public DtoReview createReview(DtoReview dtoReview) {
         // Token'dan hasta TC'sini çek
@@ -113,4 +119,74 @@ public class ReviewServiceImpl implements IReviewService {
         return response;
     }
 
+    @Override
+    public List<DtoReview> getDoctorReviews() {
+        String doctorTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Doctors doctor = doctorRepository.findById(doctorTc)
+                .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Doktor bulunamadı")));
+
+        List<Reviews> reviewsList = reviewRepository.findByDoctor(doctor);
+
+        List<DtoReview> dtoReviews = new ArrayList<>();
+        for (Reviews review : reviewsList) {
+            DtoReview dtoReview = new DtoReview();
+            BeanUtils.copyProperties(review, dtoReview);
+
+            DtoAppointmentReview dtoAppointment = new DtoAppointmentReview();
+            dtoAppointment.setAppointment_id(review.getAppointment().getAppointmentId());
+            dtoAppointment.setAppointment_date(review.getAppointment().getAppointmentDate());
+            dtoAppointment.setAppointment_time(review.getAppointment().getAppointmentTime());
+            dtoAppointment.setAppointment_status(review.getAppointment().getAppointmentStatus());
+            dtoAppointment.setAppointment_text(review.getAppointment().getAppointmentText());
+
+            DtoPatientReview dtoPatient = new DtoPatientReview();
+            dtoPatient.setPatientName(review.getPatient().getName());
+            dtoPatient.setPatientSurname(review.getPatient().getSurname());
+            dtoPatient.setPatientGender(review.getPatient().getGender());
+            dtoAppointment.setDtoPatientReview(dtoPatient);
+
+            dtoReview.setAppointment(dtoAppointment);
+
+            dtoReviews.add(dtoReview);
+        }
+
+        return dtoReviews;
+    }
+    @Override
+    public List<DtoReview> getPatientReviews() {
+        String patientTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Patients patient = patientRepository.findById(patientTc)
+                .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Hasta bulunamadı")));
+        List<Reviews> reviews = reviewRepository.findByPatient(patient);
+
+        List<DtoReview> dtoReviews = new ArrayList<>();
+        for (Reviews review : reviews) {
+            DtoReview dto = new DtoReview();
+            BeanUtils.copyProperties(review, dto);
+
+            if (review.getAppointment() != null) {
+                DtoAppointmentReview dtoAppointment = new DtoAppointmentReview();
+                dtoAppointment.setAppointment_id(review.getAppointment().getAppointmentId());
+                dtoAppointment.setAppointment_date(review.getAppointment().getAppointmentDate());
+                dtoAppointment.setAppointment_time(review.getAppointment().getAppointmentTime());
+                dtoAppointment.setAppointment_status(review.getAppointment().getAppointmentStatus());
+                dtoAppointment.setAppointment_text(review.getAppointment().getAppointmentText());
+
+                if (review.getDoctor() != null) {
+                    DtoDoctorReview dtoDoctor = new DtoDoctorReview();
+                    dtoDoctor.setDoctorName(review.getDoctor().getName());
+                    dtoDoctor.setDoctorSurname(review.getDoctor().getSurname());
+                    dtoDoctor.setBranch(review.getDoctor().getBranch());
+                    dtoDoctor.setCity(review.getDoctor().getCity());
+                    dtoDoctor.setEmail(review.getDoctor().getEmail());
+                    dtoAppointment.setDtoDoctorReview(dtoDoctor);
+                }
+                dto.setAppointment(dtoAppointment);
+            }
+            dtoReviews.add(dto);
+        }
+        return dtoReviews;
+    }
 }

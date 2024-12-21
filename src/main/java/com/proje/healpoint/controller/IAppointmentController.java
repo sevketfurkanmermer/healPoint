@@ -9,4 +9,6 @@ public interface IAppointmentController {
     public ResponseEntity<DtoAppointment> createAppointment(DtoAppointment dtoAppointment);
     public ResponseEntity<List<DtoAppointment>> getUpcomingAppointments();
     public ResponseEntity<List<DtoAppointment>> getCompletedAndCancelledAppointments();
+    public ResponseEntity<List<DtoAppointment>> getAllAppointmentsByPatient();
+    public ResponseEntity<List<DtoAppointment>> getAllAppointmentsByDoctor();
 }
