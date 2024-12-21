@@ -9,9 +9,9 @@ import java.util.List;
 public interface IDoctorController {
 
     public List<DtoDoctor> getAllDoctors();
-    public DtoDoctor getDoctorById(String doctorTc);
-    public void deleteDoctorById(String doctorTc);
+    public ResponseEntity<DtoDoctor> getDoctorDetails();
+    public void deleteDoctorById();
     public DtoDoctor saveDoctor(DtoDoctorIU dtoDoctorIU);
-    public DtoDoctor updateDoctorById(DtoDoctorIU dtoDoctorIU, String doctorTc);
+    public DtoDoctor updateDoctorById(DtoDoctorIU dtoDoctorIU);
     public ResponseEntity<String> getDoctorName();
 }

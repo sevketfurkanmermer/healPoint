@@ -30,7 +30,7 @@ public class DoctorServiceImpl implements IDoctorService {
     private JwtService jwtService;
     @Override
     public List<DtoDoctor> getAllDoctors() {
-        String Tc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         List<DtoDoctor> dtoDoctorList = new ArrayList<>();
         for (Doctors doctor : doctorRepository.findAll()) {
             DtoDoctor dtoDoctor = new DtoDoctor();
@@ -41,24 +41,19 @@ public class DoctorServiceImpl implements IDoctorService {
     }
 
     @Override
-    public DtoDoctor getDoctorById(String id) {
-
+    public DtoDoctor getDoctorById() {
+        String doctorTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         DtoDoctor dtoDoctor = new DtoDoctor();
-
-        Optional<Doctors> doctorOptional = doctorRepository.findById(id);
-        if (doctorOptional.isEmpty()) {
-            return null;
-        }
-
-        Doctors doctor = doctorOptional.get();
-        BeanUtils.copyProperties(doctor,dtoDoctor);
-
+        Doctors doctor = doctorRepository.findById(doctorTc)
+                .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Doktor bulunamadı")));
+        BeanUtils.copyProperties(doctor, dtoDoctor);
         return dtoDoctor;
     }
 
     @Override
-    public void deleteDoctorById(String id) {
-        Optional<Doctors> optional =  doctorRepository.findById(id);
+    public void deleteDoctorById() {
+        String doctorTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<Doctors> optional =  doctorRepository.findById(doctorTc);
         if (optional.isPresent()) {
             doctorRepository.delete(optional.get());
         }
@@ -87,11 +82,13 @@ public class DoctorServiceImpl implements IDoctorService {
     }
 
     @Override
-    public DtoDoctor updateDoctor(String id, DtoDoctorIU doctorForUpdate) {
+    public DtoDoctor updateDoctorById(DtoDoctorIU doctorForUpdate) {
+
+        String doctorTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         DtoDoctor dtoDoctor = new DtoDoctor();
 
-        Optional<Doctors> optionalDoctor = doctorRepository.findById(id);
+        Optional<Doctors> optionalDoctor = doctorRepository.findById(doctorTc);
 
         if (optionalDoctor.isPresent()) {
             Doctors doctor = optionalDoctor.get();
@@ -99,7 +96,8 @@ public class DoctorServiceImpl implements IDoctorService {
             doctor.setSurname(doctorForUpdate.getSurname());
             doctor.setPhoneNumber(doctorForUpdate.getPhoneNumber());
             doctor.setEmail(doctorForUpdate.getEmail());
-            doctor.setPassword(doctorForUpdate.getPassword());
+            String encodedPassword=passwordEncoder.encode(doctorForUpdate.getPassword());
+            doctor.setPassword(encodedPassword);
             doctor.setCity(doctorForUpdate.getCity());
             doctor.setDistrict(doctorForUpdate.getDistrict());
             doctor.setAddress(doctorForUpdate.getAddress());

@@ -24,15 +24,16 @@ public class DoctorControllerImpl implements IDoctorController {
     }
 
     @Override
-    @GetMapping(path="/list/{id}")
-    public DtoDoctor getDoctorById(@PathVariable(name = "id") String doctorTc) {
-        return doctorService.getDoctorById(doctorTc);
+    @GetMapping(path="/list-token")
+    public ResponseEntity<DtoDoctor> getDoctorDetails() {
+        DtoDoctor dtoDoctor = doctorService.getDoctorById();
+        return ResponseEntity.ok(dtoDoctor);
     }
 
     @Override
-    @DeleteMapping("/delete/{id}")
-    public void deleteDoctorById(@PathVariable(name = "id") String doctorTc) {
-        doctorService.deleteDoctorById(doctorTc);
+    @DeleteMapping("/delete")
+    public void deleteDoctorById() {
+        doctorService.deleteDoctorById();
     }  
 
     @Override
@@ -40,11 +41,10 @@ public class DoctorControllerImpl implements IDoctorController {
     public DtoDoctor saveDoctor(@RequestBody DtoDoctorIU dtoDoctorIU) {
         return doctorService.saveDoctor(dtoDoctorIU);
     }
-
     @Override
-    @PutMapping(path="/{id}")
-    public DtoDoctor updateDoctorById(@RequestBody DtoDoctorIU dtoDoctorIU, @PathVariable(name = "id") String doctorTc) {
-        return doctorService.updateDoctor(doctorTc, dtoDoctorIU);
+    @PutMapping(path="/update")
+    public DtoDoctor updateDoctorById(@RequestBody DtoDoctorIU dtoDoctorIU) {
+        return doctorService.updateDoctorById(dtoDoctorIU);
     }
 
     @GetMapping("/name")
