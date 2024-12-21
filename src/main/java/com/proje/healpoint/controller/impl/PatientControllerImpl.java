@@ -39,4 +39,11 @@ public class PatientControllerImpl implements IPatientController {
         DtoPatient dtoPatient = patientService.getPatientById();
         return ResponseEntity.ok(dtoPatient);
     }
+
+    @GetMapping("name")
+    @Override
+    public ResponseEntity<String> getPatientName() {
+        String patientName = patientService.getPatientNameFromToken();
+        return ResponseEntity.ok(patientName);
+    }
 }

@@ -11,4 +11,5 @@ public interface IDoctorService {
     public void deleteDoctorById(String id);
     public DtoDoctor saveDoctor(DtoDoctorIU doctorForSave);
     public DtoDoctor updateDoctor(String id,DtoDoctorIU doctorForUpdate);
+    public String getDoctorNameFromToken();
 }

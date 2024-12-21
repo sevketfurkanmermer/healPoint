@@ -11,4 +11,6 @@ public interface IPatientService {
 
     public DtoPatient getPatientById();
 
+    public String getPatientNameFromToken();
+
 }

@@ -147,4 +147,15 @@ public class PatientServiceImpl implements IPatientService {
 
         }
     }
+
+    @Override
+    public String getPatientNameFromToken() {
+        String patientTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Patients patient = patientRepository.findById(patientTc)
+                .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Hasta bulunamadı")));
+        return patient.getName();
+    }
+
+
 }

@@ -2,6 +2,9 @@ package com.proje.healpoint.service.impl;
 
 import com.proje.healpoint.dto.DtoDoctor;
 import com.proje.healpoint.dto.DtoDoctorIU;
+import com.proje.healpoint.exception.BaseException;
+import com.proje.healpoint.exception.ErrorMessage;
+import com.proje.healpoint.exception.MessageType;
 import com.proje.healpoint.jwt.JwtService;
 import com.proje.healpoint.model.Doctors;
 import com.proje.healpoint.repository.DoctorRepository;
@@ -108,6 +111,14 @@ public class DoctorServiceImpl implements IDoctorService {
         }
 
         return null;
+    }
+
+    @Override
+    public String getDoctorNameFromToken() {
+        String doctorTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Doctors doctor = doctorRepository.findById(doctorTc)
+                .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Doktor bulunamadı")));
+        return doctor.getName();
     }
 }
 

@@ -11,4 +11,6 @@ public interface IPatientController {
     public ResponseEntity<DtoPatient> updatePatient( DtoPatientIU dtoPatientIU);
 
     public ResponseEntity<DtoPatient> getPatient();
+
+    public ResponseEntity<String> getPatientName();
 }

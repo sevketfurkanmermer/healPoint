@@ -5,6 +5,7 @@ import com.proje.healpoint.dto.DtoDoctor;
 import com.proje.healpoint.dto.DtoDoctorIU;
 import com.proje.healpoint.service.IDoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,5 +45,12 @@ public class DoctorControllerImpl implements IDoctorController {
     @PutMapping(path="/{id}")
     public DtoDoctor updateDoctorById(@RequestBody DtoDoctorIU dtoDoctorIU, @PathVariable(name = "id") String doctorTc) {
         return doctorService.updateDoctor(doctorTc, dtoDoctorIU);
+    }
+
+    @GetMapping("/name")
+    @Override
+    public ResponseEntity<String> getDoctorName() {
+        String doctorName = doctorService.getDoctorNameFromToken();
+        return ResponseEntity.ok(doctorName);
     }
 }
