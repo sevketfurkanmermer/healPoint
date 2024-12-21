@@ -37,9 +37,9 @@ public class AppConfig {
                 if (optional.isPresent()){
                     Patients patient = optional.get();
                     return new User(
-                            patient.getTc(),         // Kullanıcı adı
-                            patient.getPassword(),          // Şifre
-                            new ArrayList<>()               // Yetkiler (boş liste)
+                            patient.getTc(),        
+                            patient.getPassword(), 
+                            new ArrayList<>()  
                     );
                 }
                 Optional<Doctors> optionalDoctor = doctorRepository.findById(userName);

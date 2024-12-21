@@ -16,13 +16,13 @@ public class AppointmentStatusScheduler {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
-    @Scheduled(cron = "59 * * * * ?") // Her saatin 59. dakikasında çalışır
+    @Scheduled(cron = "59 * * * * ?") 
     public void updateCompletedAppointments() {
         LocalDate today = LocalDate.now();
         LocalTime now = LocalTime.now();
 
         List<Appointments> activeAppointments = appointmentRepository.findByAppointmentStatusAndAppointmentDateAndAppointmentTimeBefore(
-                AppointmentStatus.AKTİF, today, now);
+                AppointmentStatus.AKTIF, today, now);
 
         for (Appointments appointment : activeAppointments) {
             appointment.setAppointmentStatus(AppointmentStatus.TAMAMLANDI);
