@@ -8,4 +8,5 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface IAuthController {
     public ResponseEntity<AuthResponse> authenticate(AuthRequest authRequest);
     public ResponseEntity<?> login(AuthRequest authRequest);
+    public ResponseEntity<?> loginAsDoctor(AuthRequest authRequest);
 }
