@@ -102,9 +102,9 @@ public class ReviewServiceImpl implements IReviewService {
         dtoAppointmentReview.setDtoDoctorReview(dtoDoctorReview);
 
         DtoPatientReview dtoPatientReview = new DtoPatientReview();
-        dtoPatientReview.setPatient_gender(patient.getGender());
-        dtoPatientReview.setPatient_name(patient.getName());
-        dtoPatientReview.setPatient_surname(patient.getSurname());
+        dtoPatientReview.setPatientGender(patient.getGender());
+        dtoPatientReview.setPatientName(patient.getName());
+        dtoPatientReview.setPatientSurname(patient.getSurname());
         dtoAppointmentReview.setDtoPatientReview(dtoPatientReview);
 
 

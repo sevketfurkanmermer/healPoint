@@ -2,6 +2,7 @@ package com.proje.healpoint.service.impl;
 
 import com.proje.healpoint.dto.DtoAppointment;
 import com.proje.healpoint.dto.DtoDoctorReview;
+import com.proje.healpoint.dto.DtoPatientReview;
 import com.proje.healpoint.enums.AppointmentStatus;
 import com.proje.healpoint.exception.BaseException;
 import com.proje.healpoint.exception.ErrorMessage;
@@ -83,50 +84,58 @@ public class AppointmentServiceImpl implements IAppointmentService {
         dtoDoctor.setEmail(savedAppointment.getDoctor().getEmail());
         response.setDoctor(dtoDoctor);
         response.setPatientTc(savedAppointment.getPatient().getTc());
+        DtoPatientReview dtoPatient = new DtoPatientReview();
+        dtoPatient.setPatientName(savedAppointment.getPatient().getName());
+        dtoPatient.setPatientSurname(savedAppointment.getPatient().getSurname());
+        dtoPatient.setPatientGender(savedAppointment.getPatient().getGender());
+        response.setPatient(dtoPatient);
+
         return response;
     }
 
     public List<DtoAppointment> getUpcomingAppointments() {
+        // Şu anki tarih ve zaman
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime twoDaysLater = now.plusDays(2);
         String patientTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        List<Appointments> activeAppointments = appointmentRepository.findByPatient_TcAndAppointmentStatus(patientTc,
-                AppointmentStatus.AKTİF);
+        List<Appointments> activeAppointments = appointmentRepository.findByPatient_TcAndAppointmentStatus(patientTc, AppointmentStatus.AKTİF);
 
         List<DtoAppointment> upcomingAppointments = new ArrayList<>();
 
         for (Appointments appointment : activeAppointments) {
             try {
-                LocalDate appointmentDate = appointment.getAppointmentDate();
-                LocalDateTime appointmentDateTime = LocalDateTime.of(appointmentDate, appointment.getAppointmentTime());
+                LocalDateTime appointmentDateTime = LocalDateTime.of(appointment.getAppointmentDate(), appointment.getAppointmentTime());
 
-                if (appointmentDateTime.isBefore(twoDaysLater) && appointmentDateTime.isAfter(now)) {
-
+                if (appointmentDateTime.isAfter(now) && appointmentDateTime.isBefore(twoDaysLater)) {
                     DtoAppointment dtoAppointment = new DtoAppointment();
-                    dtoAppointment.setAppointmentId(appointment.getAppointmentId());
-                    dtoAppointment.setAppointmentDate(appointment.getAppointmentDate());
-                    dtoAppointment.setAppointmentTime(appointment.getAppointmentTime());
-                    dtoAppointment.setAppointmentStatus(appointment.getAppointmentStatus());
-                    dtoAppointment.setAppointmentText(appointment.getAppointmentText());
+                    BeanUtils.copyProperties(appointment, dtoAppointment);
+                    if (appointment.getDoctor() != null) {
+                        DtoDoctorReview dtoDoctor = new DtoDoctorReview();
+                        dtoDoctor.setDoctorName(appointment.getDoctor().getName());
+                        dtoDoctor.setDoctorSurname(appointment.getDoctor().getSurname());
+                        dtoDoctor.setBranch(appointment.getDoctor().getBranch());
+                        dtoDoctor.setCity(appointment.getDoctor().getCity());
+                        dtoDoctor.setEmail(appointment.getDoctor().getEmail());
+                        dtoAppointment.setDoctor(dtoDoctor);
+                    }
+                    if(appointment.getPatient() != null) {
+                        DtoPatientReview dtoPatient = new DtoPatientReview();
+                        dtoPatient.setPatientName(appointment.getPatient().getName());
+                        dtoPatient.setPatientSurname(appointment.getPatient().getSurname());
+                        dtoPatient.setPatientGender(appointment.getPatient().getGender());
+                        dtoAppointment.setPatient(dtoPatient);
+                    }
                     dtoAppointment.setPatientTc(patientTc);
-
-                    DtoDoctorReview dtoDoctor = new DtoDoctorReview();
-                    dtoDoctor.setDoctorName(appointment.getDoctor().getName());
-                    dtoDoctor.setDoctorSurname(appointment.getDoctor().getSurname());
-                    dtoDoctor.setBranch(appointment.getDoctor().getBranch());
-                    dtoDoctor.setCity(appointment.getDoctor().getCity());
-                    dtoDoctor.setEmail(appointment.getDoctor().getEmail());
-                    dtoAppointment.setDoctor(dtoDoctor);
-
                     upcomingAppointments.add(dtoAppointment);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+
         return upcomingAppointments;
     }
+
     public List<DtoAppointment> getCompletedAndCancelledAppointments() {
         String patientTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -148,6 +157,12 @@ public class AppointmentServiceImpl implements IAppointmentService {
                 dtoDoctor.setCity(appointment.getDoctor().getCity());
                 dtoDoctor.setEmail(appointment.getDoctor().getEmail());
                 dto.setDoctor(dtoDoctor);
+
+                DtoPatientReview dtoPatient = new DtoPatientReview();
+                dtoPatient.setPatientName(appointment.getPatient().getName());
+                dtoPatient.setPatientSurname(appointment.getPatient().getSurname());
+                dtoPatient.setPatientGender(appointment.getPatient().getGender());
+                dto.setPatient(dtoPatient);
             }
             if (appointment.getPatient() != null) {
                 dto.setPatientTc(appointment.getPatient().getTc());
