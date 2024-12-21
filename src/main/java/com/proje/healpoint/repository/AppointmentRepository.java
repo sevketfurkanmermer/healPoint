@@ -28,5 +28,8 @@ public interface AppointmentRepository extends JpaRepository<Appointments, Long>
                         LocalTime appointmentTime);
 
         List<Appointments> findByPatient_TcAndAppointmentStatusIn(String patientTc, List<AppointmentStatus> statuses);
+
+        List<Appointments> findByAppointmentStatusAndAppointmentDateAndAppointmentTimeBefore(
+                AppointmentStatus status, LocalDate date, LocalTime time);
 }
 
