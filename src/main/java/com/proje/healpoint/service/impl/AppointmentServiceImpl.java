@@ -60,6 +60,15 @@ public class AppointmentServiceImpl implements IAppointmentService {
             throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, String.join(" - ", errorMessages)));
         }
 
+        LocalDate appointmentDate = dtoAppointment.getAppointmentDate();
+        LocalTime appointmentTime = dtoAppointment.getAppointmentTime();
+        LocalDateTime appointmentDateTime = LocalDateTime.of(appointmentDate, appointmentTime);
+
+        if (appointmentDateTime.isBefore(LocalDateTime.now())) {
+            throw new BaseException(
+                    new ErrorMessage(MessageType.INVALID_INPUT, "Geçmiş tarih ve saate randevu alınamaz."));
+        }
+
         boolean isAlreadyBooked = appointmentRepository.existsByDoctor_TcAndAppointmentDateAndAppointmentTime(
                 dtoAppointment.getDoctorTc(),
                 dtoAppointment.getAppointmentDate(),
