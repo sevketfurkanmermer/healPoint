@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -132,6 +133,7 @@ public class AppointmentServiceImpl implements IAppointmentService {
                 e.printStackTrace();
             }
         }
+        upcomingAppointments.sort(Comparator.comparing(DtoAppointment::getAppointmentDate).thenComparing(DtoAppointment::getAppointmentTime));
 
         return upcomingAppointments;
     }
@@ -169,6 +171,7 @@ public class AppointmentServiceImpl implements IAppointmentService {
             }
             dtoAppointments.add(dto);
         }
+        dtoAppointments.sort(Comparator.comparing(DtoAppointment::getAppointmentDate).thenComparing(DtoAppointment::getAppointmentTime));
         return dtoAppointments;
     }
 
