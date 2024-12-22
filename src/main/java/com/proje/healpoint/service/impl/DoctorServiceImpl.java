@@ -41,7 +41,7 @@ public class DoctorServiceImpl implements IDoctorService {
     }
 
     @Override
-    public DtoDoctor getDoctorById() {
+    public DtoDoctor getDoctorByToken() {
         String doctorTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         DtoDoctor dtoDoctor = new DtoDoctor();
         Doctors doctor = doctorRepository.findById(doctorTc)
@@ -50,6 +50,20 @@ public class DoctorServiceImpl implements IDoctorService {
         return dtoDoctor;
     }
 
+    @Override
+    public DtoDoctor getDoctorById(String id) {
+        String tc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    
+        Doctors doctor = doctorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Doctor not found with ID: " + id));
+    
+        DtoDoctor dtoDoctor = new DtoDoctor();
+    
+        BeanUtils.copyProperties(doctor, dtoDoctor);
+    
+        return dtoDoctor;
+    }
+    
     @Override
     public void deleteDoctorById() {
         String doctorTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

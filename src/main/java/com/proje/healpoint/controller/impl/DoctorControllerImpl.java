@@ -26,9 +26,17 @@ public class DoctorControllerImpl implements IDoctorController {
     @Override
     @GetMapping(path="/list-token")
     public ResponseEntity<DtoDoctor> getDoctorDetails() {
-        DtoDoctor dtoDoctor = doctorService.getDoctorById();
+        DtoDoctor dtoDoctor = doctorService.getDoctorByToken();
         return ResponseEntity.ok(dtoDoctor);
     }
+
+    @Override
+    @GetMapping(path = "/list/{id}")
+    public ResponseEntity<DtoDoctor> getDoctorByID(@PathVariable("id") String id) {
+        DtoDoctor dtoDoctor = doctorService.getDoctorById(id);
+        return ResponseEntity.ok(dtoDoctor);
+    }
+    
 
     @Override
     @DeleteMapping("/delete")

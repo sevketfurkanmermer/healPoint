@@ -11,6 +11,7 @@ import com.proje.healpoint.model.Reviews;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DtoDoctor extends DtoUser {
+    private String tc;
     private String branch;
     private String about;
     private String city;
