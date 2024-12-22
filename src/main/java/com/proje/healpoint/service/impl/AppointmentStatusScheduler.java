@@ -16,7 +16,7 @@ public class AppointmentStatusScheduler {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
-    @Scheduled(cron = "59 * * * * ?") // Her saatin 59. dakikasında çalışır
+    @Scheduled(cron = "0 59 * * * ?") // Her saatin 59. dakikasında çalışır
     public void updateCompletedAppointments() {
         LocalDate today = LocalDate.now();
         LocalTime now = LocalTime.now();
