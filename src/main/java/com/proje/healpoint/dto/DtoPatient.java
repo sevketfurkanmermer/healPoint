@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class DtoPatient  extends DtoUser{
     private String Tc;
-    private Date birthDate;
+    private LocalDate birthDate;
     private String age;
     private List<DtoAppointment> appointments = new ArrayList<>();
 
@@ -27,8 +27,7 @@ public class DtoPatient  extends DtoUser{
         if (birthDate == null) {
             return null;
         }
-        LocalDate birthLocalDate = new java.sql.Date(birthDate.getTime()).toLocalDate();
-        return Period.between(birthLocalDate, LocalDate.now()).getYears();
+        return Period.between(birthDate, LocalDate.now()).getYears();
     }
 
 
