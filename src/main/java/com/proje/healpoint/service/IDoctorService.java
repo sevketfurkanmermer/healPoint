@@ -8,9 +8,16 @@ import java.util.List;
 
 public interface IDoctorService {
     public List<DtoDoctor> getAllDoctors();
-    public DtoDoctor getDoctorById();
+
+    public DtoDoctor getDoctorByToken();
+
     public void deleteDoctorById();
+
     public DtoDoctor saveDoctor(DtoDoctorIU doctorForSave);
+
     public DtoDoctor updateDoctorById(DtoDoctorIU dtoDoctorIU);
+
+    public DtoDoctor getDoctorById(String id);
+
     public String getDoctorNameFromToken();
 }
