@@ -5,10 +5,7 @@ import com.proje.healpoint.dto.DtoDoctorsFav;
 import com.proje.healpoint.service.IFavoriteDoctorsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,5 +28,12 @@ public class FavoriteDoctorsController implements IFavoriteDoctorsController {
     public ResponseEntity<List<DtoDoctorsFav>> getFavoriteDoctors() {
         List<DtoDoctorsFav> favoriteDoctors = favoriteDoctorsService.getFavoriteDoctors();
         return ResponseEntity.ok(favoriteDoctors);
+    }
+
+    @DeleteMapping("/remove/{doctorTc}")
+    @Override
+    public ResponseEntity<List<DtoDoctorsFav>> removeFavoriteDoctor(@PathVariable String doctorTc) {
+        List<DtoDoctorsFav> updatedFavorites = favoriteDoctorsService.removeFavoriteDoctor(doctorTc);
+        return ResponseEntity.ok(updatedFavorites);
     }
 }

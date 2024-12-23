@@ -8,6 +8,7 @@ import java.util.List;
 public interface IFavoriteDoctorsService {
     public String addFavoriteDoctor(String doctorTc) ;
     public List<DtoDoctorsFav> getFavoriteDoctors();
+    public List<DtoDoctorsFav> removeFavoriteDoctor(String doctorTc);
 
 
 }

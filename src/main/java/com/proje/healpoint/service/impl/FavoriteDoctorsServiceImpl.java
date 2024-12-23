@@ -65,4 +65,24 @@ public class FavoriteDoctorsServiceImpl implements IFavoriteDoctorsService {
         dto.setEmail(doctor.getEmail());
         return dto;
     }
+    @Override
+    public List<DtoDoctorsFav> removeFavoriteDoctor(String doctorTc) {
+        String patientTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Patients patient = patientRepository.findById(patientTc)
+                .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Hasta bulunamadı")));
+
+        Doctors doctor = doctorRepository.findById(doctorTc)
+                .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Doktor bulunamadı")));
+
+        FavoriteDoctors favorite = favoriteDoctorsRepository.findByPatientAndDoctor(patient, doctor)
+                .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Bu doktor favorilerinizde değil.")));
+
+        favoriteDoctorsRepository.delete(favorite);
+
+        List<FavoriteDoctors> updatedFavorites = favoriteDoctorsRepository.findByPatient(patient);
+        return updatedFavorites.stream()
+                .map(fav -> convertToDto(fav.getDoctor()))
+                .collect(Collectors.toList());
+    }
 }

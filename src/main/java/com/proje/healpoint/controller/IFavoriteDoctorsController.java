@@ -9,4 +9,5 @@ import java.util.List;
 public interface IFavoriteDoctorsController {
     public ResponseEntity<String> addFavoriteDoctor(@PathVariable String doctorTc);
     public ResponseEntity<List<DtoDoctorsFav>> getFavoriteDoctors();
+    public ResponseEntity<List<DtoDoctorsFav>> removeFavoriteDoctor(String doctorTc);
 }
