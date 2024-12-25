@@ -87,17 +87,17 @@ public class AppointmentServiceImpl implements IAppointmentService {
         DtoAppointment response = new DtoAppointment();
         BeanUtils.copyProperties(savedAppointment, response);
         DtoDoctorReview dtoDoctor = new DtoDoctorReview();
-        dtoDoctor.setDoctorName(savedAppointment.getDoctor().getName());
-        dtoDoctor.setDoctorSurname(savedAppointment.getDoctor().getSurname());
+        dtoDoctor.setName(savedAppointment.getDoctor().getName());
+        dtoDoctor.setSurname(savedAppointment.getDoctor().getSurname());
         dtoDoctor.setBranch(savedAppointment.getDoctor().getBranch());
         dtoDoctor.setCity(savedAppointment.getDoctor().getCity());
         dtoDoctor.setEmail(savedAppointment.getDoctor().getEmail());
         response.setDoctor(dtoDoctor);
         response.setPatientTc(savedAppointment.getPatient().getTc());
         DtoPatientReview dtoPatient = new DtoPatientReview();
-        dtoPatient.setPatientName(savedAppointment.getPatient().getName());
-        dtoPatient.setPatientSurname(savedAppointment.getPatient().getSurname());
-        dtoPatient.setPatientGender(savedAppointment.getPatient().getGender());
+        dtoPatient.setName(savedAppointment.getPatient().getName());
+        dtoPatient.setSurname(savedAppointment.getPatient().getSurname());
+        dtoPatient.setGender(savedAppointment.getPatient().getGender());
         response.setPatient(dtoPatient);
 
         return response;
@@ -121,8 +121,8 @@ public class AppointmentServiceImpl implements IAppointmentService {
                     BeanUtils.copyProperties(appointment, dtoAppointment);
                     if (appointment.getDoctor() != null) {
                         DtoDoctorReview dtoDoctor = new DtoDoctorReview();
-                        dtoDoctor.setDoctorName(appointment.getDoctor().getName());
-                        dtoDoctor.setDoctorSurname(appointment.getDoctor().getSurname());
+                        dtoDoctor.setName(appointment.getDoctor().getName());
+                        dtoDoctor.setSurname(appointment.getDoctor().getSurname());
                         dtoDoctor.setBranch(appointment.getDoctor().getBranch());
                         dtoDoctor.setCity(appointment.getDoctor().getCity());
                         dtoDoctor.setEmail(appointment.getDoctor().getEmail());
@@ -130,9 +130,9 @@ public class AppointmentServiceImpl implements IAppointmentService {
                     }
                     if(appointment.getPatient() != null) {
                         DtoPatientReview dtoPatient = new DtoPatientReview();
-                        dtoPatient.setPatientName(appointment.getPatient().getName());
-                        dtoPatient.setPatientSurname(appointment.getPatient().getSurname());
-                        dtoPatient.setPatientGender(appointment.getPatient().getGender());
+                        dtoPatient.setName(appointment.getPatient().getName());
+                        dtoPatient.setSurname(appointment.getPatient().getSurname());
+                        dtoPatient.setGender(appointment.getPatient().getGender());
                         dtoAppointment.setPatient(dtoPatient);
                     }
                     dtoAppointment.setPatientTc(patientTc);
@@ -162,17 +162,17 @@ public class AppointmentServiceImpl implements IAppointmentService {
             BeanUtils.copyProperties(appointment, dto);
             if (appointment.getDoctor() != null) {
                 DtoDoctorReview dtoDoctor = new DtoDoctorReview();
-                dtoDoctor.setDoctorName(appointment.getDoctor().getName());
-                dtoDoctor.setDoctorSurname(appointment.getDoctor().getSurname());
+                dtoDoctor.setName(appointment.getDoctor().getName());
+                dtoDoctor.setSurname(appointment.getDoctor().getSurname());
                 dtoDoctor.setBranch(appointment.getDoctor().getBranch());
                 dtoDoctor.setCity(appointment.getDoctor().getCity());
                 dtoDoctor.setEmail(appointment.getDoctor().getEmail());
                 dto.setDoctor(dtoDoctor);
 
                 DtoPatientReview dtoPatient = new DtoPatientReview();
-                dtoPatient.setPatientName(appointment.getPatient().getName());
-                dtoPatient.setPatientSurname(appointment.getPatient().getSurname());
-                dtoPatient.setPatientGender(appointment.getPatient().getGender());
+                dtoPatient.setName(appointment.getPatient().getName());
+                dtoPatient.setSurname(appointment.getPatient().getSurname());
+                dtoPatient.setGender(appointment.getPatient().getGender());
                 dto.setPatient(dtoPatient);
             }
             if (appointment.getPatient() != null) {
@@ -199,8 +199,8 @@ public class AppointmentServiceImpl implements IAppointmentService {
 
             if (appointment.getDoctor() != null) {
                 DtoDoctorReview dtoDoctor = new DtoDoctorReview();
-                dtoDoctor.setDoctorName(appointment.getDoctor().getName());
-                dtoDoctor.setDoctorSurname(appointment.getDoctor().getSurname());
+                dtoDoctor.setName(appointment.getDoctor().getName());
+                dtoDoctor.setSurname(appointment.getDoctor().getSurname());
                 dtoDoctor.setBranch(appointment.getDoctor().getBranch());
                 dtoDoctor.setCity(appointment.getDoctor().getCity());
                 dtoDoctor.setEmail(appointment.getDoctor().getEmail());
@@ -226,9 +226,9 @@ public class AppointmentServiceImpl implements IAppointmentService {
             BeanUtils.copyProperties(appointment, dtoAppointment);
             if (appointment.getPatient() != null) {
                 DtoPatientReview dtoPatient = new DtoPatientReview();
-                dtoPatient.setPatientName(appointment.getPatient().getName());
-                dtoPatient.setPatientSurname(appointment.getPatient().getSurname());
-                dtoPatient.setPatientGender(appointment.getPatient().getGender());
+                dtoPatient.setName(appointment.getPatient().getName());
+                dtoPatient.setSurname(appointment.getPatient().getSurname());
+                dtoPatient.setGender(appointment.getPatient().getGender());
                 dtoAppointment.setPatient(dtoPatient);
             }
             dtoAppointments.add(dtoAppointment);
@@ -270,17 +270,17 @@ public class AppointmentServiceImpl implements IAppointmentService {
         dto.setAppointmentText(appointment.getAppointmentText());
         if (appointment.getPatient() != null) {
             DtoPatientReview dtoPatient = new DtoPatientReview();
-            dtoPatient.setPatientName(appointment.getPatient().getName());
-            dtoPatient.setPatientSurname(appointment.getPatient().getSurname());
-            dtoPatient.setPatientGender(appointment.getPatient().getGender());
+            dtoPatient.setName(appointment.getPatient().getName());
+            dtoPatient.setSurname(appointment.getPatient().getSurname());
+            dtoPatient.setGender(appointment.getPatient().getGender());
             dto.setPatient(dtoPatient);
             dto.setPatientTc(appointment.getPatient().getTc());
         }
 
         if (appointment.getDoctor() != null) {
             DtoDoctorReview dtoDoctor = new DtoDoctorReview();
-            dtoDoctor.setDoctorName(appointment.getDoctor().getName());
-            dtoDoctor.setDoctorSurname(appointment.getDoctor().getSurname());
+            dtoDoctor.setName(appointment.getDoctor().getName());
+            dtoDoctor.setSurname(appointment.getDoctor().getSurname());
             dtoDoctor.setBranch(appointment.getDoctor().getBranch());
             dtoDoctor.setCity(appointment.getDoctor().getCity());
             dtoDoctor.setEmail(appointment.getDoctor().getEmail());
@@ -309,9 +309,9 @@ public class AppointmentServiceImpl implements IAppointmentService {
 
             if (appointment.getPatient() != null) {
                 DtoPatientReview dtoPatient = new DtoPatientReview();
-                dtoPatient.setPatientName(appointment.getPatient().getName());
-                dtoPatient.setPatientSurname(appointment.getPatient().getSurname());
-                dtoPatient.setPatientGender(appointment.getPatient().getGender());
+                dtoPatient.setName(appointment.getPatient().getName());
+                dtoPatient.setSurname(appointment.getPatient().getSurname());
+                dtoPatient.setGender(appointment.getPatient().getGender());
                 dto.setPatient(dtoPatient);
             }
             dtoAppointments.add(dto);
