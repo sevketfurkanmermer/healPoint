@@ -19,7 +19,4 @@ public class DtoDoctorAvailability {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate availableDate;
     private List<LocalTime> availableTimes;
-    private LocalTime workingHoursStart;
-    private LocalTime workingHoursEnd;
-
 }

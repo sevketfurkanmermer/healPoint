@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.proje.healpoint.controller.IDoctorAvailabailityController;
 import com.proje.healpoint.dto.DtoDoctorAvailability;
-import com.proje.healpoint.dto.DtoDoctorAvailabilityIU;
 import com.proje.healpoint.service.IDoctorAvailabilityService;
 
 @RestController
@@ -25,19 +24,6 @@ public class DoctorAvailabilityControllerImpl implements IDoctorAvailabailityCon
             @RequestParam LocalDate date) {
         DtoDoctorAvailability availabilities = doctorAvailabilityService.getDoctorAvailability(doctorTc, date);
         return ResponseEntity.ok(availabilities);
-    }
-
-    @Override
-    @PostMapping("/save")
-    public DtoDoctorAvailability saveDoctorAvailability(@RequestBody DtoDoctorAvailabilityIU dtoDoctorAvailabilityIU) {
-        return doctorAvailabilityService.saveDoctorAvailability(dtoDoctorAvailabilityIU);
-    }
-
-    @Override
-    @PutMapping("/update/{id}")
-    public DtoDoctorAvailability updateDoctorAvailability(@RequestBody DtoDoctorAvailabilityIU dtoDoctorAvailabilityIU,
-            @PathVariable(name = "id") Long id) {
-        return doctorAvailabilityService.updateDoctorWorkTimes(id, dtoDoctorAvailabilityIU);
     }
 
 }

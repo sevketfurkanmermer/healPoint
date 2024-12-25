@@ -42,7 +42,7 @@ public class DoctorControllerImpl implements IDoctorController {
     @DeleteMapping("/delete")
     public void deleteDoctorById() {
         doctorService.deleteDoctorById();
-    }  
+    }
 
     @Override
     @PostMapping("/save")
