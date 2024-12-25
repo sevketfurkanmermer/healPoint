@@ -6,7 +6,9 @@ import com.proje.healpoint.exception.BaseException;
 import com.proje.healpoint.exception.ErrorMessage;
 import com.proje.healpoint.exception.MessageType;
 import com.proje.healpoint.jwt.JwtService;
+import com.proje.healpoint.model.Availability;
 import com.proje.healpoint.model.Doctors;
+import com.proje.healpoint.repository.AvailabilityRepository;
 import com.proje.healpoint.repository.DoctorRepository;
 import com.proje.healpoint.service.IDoctorService;
 import org.springframework.beans.BeanUtils;
@@ -15,6 +17,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +32,8 @@ public class DoctorServiceImpl implements IDoctorService {
     private BCryptPasswordEncoder passwordEncoder;
     @Autowired
     private JwtService jwtService;
+    @Autowired
+    private AvailabilityRepository availabilityRepository;
     @Override
     public List<DtoDoctor> getAllDoctors() {
 
@@ -92,6 +98,14 @@ public class DoctorServiceImpl implements IDoctorService {
         Doctors createdDoctor = doctorRepository.save(doctor);
         DtoDoctor dtoDoctor=new DtoDoctor();
         BeanUtils.copyProperties(createdDoctor,dtoDoctor);
+        for (DayOfWeek day : List.of(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY)) {
+            Availability availability = new Availability();
+            availability.setDoctor(createdDoctor);
+            availability.setDayOfWeek(day);
+            availability.setStartTime(LocalTime.of(9, 0));
+            availability.setEndTime(LocalTime.of(16, 0));
+            availabilityRepository.save(availability);
+        }
         return dtoDoctor;
     }
 
