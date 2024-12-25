@@ -56,7 +56,7 @@ public class DoctorAvailabilityServiceImpl implements IDoctorAvailabilityService
             return availableTimes;
         }
 
-        while (!start.isAfter(end)) { 
+        while (!start.isAfter(end)) {
             if (isSlotAvailable(doctor, date, start)) {
                 availableTimes.add(start);
             }

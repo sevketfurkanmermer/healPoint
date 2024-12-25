@@ -100,17 +100,17 @@ public class ReviewServiceImpl implements IReviewService {
         dtoAppointmentReview.setAppointment_text(appointment.getAppointmentText());
 
         DtoDoctorReview dtoDoctorReview = new DtoDoctorReview();
-        dtoDoctorReview.setDoctorName(doctor.getName());
-        dtoDoctorReview.setDoctorSurname(doctor.getSurname());
+        dtoDoctorReview.setName(doctor.getName());
+        dtoDoctorReview.setSurname(doctor.getSurname());
         dtoDoctorReview.setBranch(doctor.getBranch());
         dtoDoctorReview.setCity(doctor.getCity());
         dtoDoctorReview.setEmail(doctor.getEmail());
         dtoAppointmentReview.setDtoDoctorReview(dtoDoctorReview);
 
         DtoPatientReview dtoPatientReview = new DtoPatientReview();
-        dtoPatientReview.setPatientGender(patient.getGender());
-        dtoPatientReview.setPatientName(patient.getName());
-        dtoPatientReview.setPatientSurname(patient.getSurname());
+        dtoPatientReview.setGender(patient.getGender());
+        dtoPatientReview.setName(patient.getName());
+        dtoPatientReview.setSurname(patient.getSurname());
         dtoAppointmentReview.setDtoPatientReview(dtoPatientReview);
 
 
@@ -141,9 +141,9 @@ public class ReviewServiceImpl implements IReviewService {
             dtoAppointment.setAppointment_text(review.getAppointment().getAppointmentText());
 
             DtoPatientReview dtoPatient = new DtoPatientReview();
-            dtoPatient.setPatientName(review.getPatient().getName());
-            dtoPatient.setPatientSurname(review.getPatient().getSurname());
-            dtoPatient.setPatientGender(review.getPatient().getGender());
+            dtoPatient.setName(review.getPatient().getName());
+            dtoPatient.setSurname(review.getPatient().getSurname());
+            dtoPatient.setGender(review.getPatient().getGender());
             dtoAppointment.setDtoPatientReview(dtoPatient);
 
             dtoReview.setAppointment(dtoAppointment);
@@ -176,8 +176,8 @@ public class ReviewServiceImpl implements IReviewService {
 
                 if (review.getDoctor() != null) {
                     DtoDoctorReview dtoDoctor = new DtoDoctorReview();
-                    dtoDoctor.setDoctorName(review.getDoctor().getName());
-                    dtoDoctor.setDoctorSurname(review.getDoctor().getSurname());
+                    dtoDoctor.setName(review.getDoctor().getName());
+                    dtoDoctor.setSurname(review.getDoctor().getSurname());
                     dtoDoctor.setBranch(review.getDoctor().getBranch());
                     dtoDoctor.setCity(review.getDoctor().getCity());
                     dtoDoctor.setEmail(review.getDoctor().getEmail());

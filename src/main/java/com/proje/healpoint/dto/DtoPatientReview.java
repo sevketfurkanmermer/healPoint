@@ -10,9 +10,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DtoPatientReview {
-    private String patientName;
-    private String patientSurname;
-    private String patientGender;
+    private String name;
+    private String surname;
+    private String gender;
 }
 
 
