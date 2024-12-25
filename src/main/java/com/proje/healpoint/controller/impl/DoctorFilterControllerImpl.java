@@ -27,8 +27,8 @@ public class DoctorFilterControllerImpl implements IDoctorFilterController {
             @RequestParam(required = false) String city,
             @RequestParam(required = false) String district,
             @RequestParam(required = false) String branch,
-            @RequestParam(required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate appointmentDate,
-            @RequestParam(required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime appointmentTime) {
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate appointmentDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime appointmentTime) {
 
         List<DtoDoctor> doctors = doctorFilterService.filterDoctors(city, district, branch, appointmentDate, appointmentTime);
         return ResponseEntity.ok(doctors);

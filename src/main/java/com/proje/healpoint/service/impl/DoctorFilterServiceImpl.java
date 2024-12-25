@@ -35,6 +35,7 @@ public class DoctorFilterServiceImpl implements IDoctorFilterService {
 
     private DtoDoctor convertToDto(Doctors doctor) {
         DtoDoctor dto = new DtoDoctor();
+        dto.setTc(doctor.getTc());
         dto.setName(doctor.getName());
         dto.setSurname(doctor.getSurname());
         dto.setBranch(doctor.getBranch());
