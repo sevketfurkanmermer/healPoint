@@ -59,6 +59,7 @@ public class FavoriteDoctorsServiceImpl implements IFavoriteDoctorsService {
 
         private DtoDoctorsFav convertToDto(Doctors doctor) {
                 DtoDoctorsFav dto = new DtoDoctorsFav();
+                dto.setTc(doctor.getTc());
                 dto.setName(doctor.getName());
                 dto.setSurname(doctor.getSurname());
                 dto.setBranch(doctor.getBranch());
