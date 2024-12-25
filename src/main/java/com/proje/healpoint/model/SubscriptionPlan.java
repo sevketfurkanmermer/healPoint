@@ -30,4 +30,10 @@ public class SubscriptionPlan {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
+
+    public SubscriptionPlan(String name, BigDecimal price, Integer durationInMonths) {
+        this.name = name;
+        this.price = price;
+        this.durationInMonths = durationInMonths;
+    }
 }

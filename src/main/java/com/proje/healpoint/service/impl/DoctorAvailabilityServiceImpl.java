@@ -1,5 +1,6 @@
 package com.proje.healpoint.service.impl;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -32,7 +33,12 @@ public class DoctorAvailabilityServiceImpl implements IDoctorAvailabilityService
                 .orElseThrow(() -> new BaseException(
                         new ErrorMessage(MessageType.NO_RECORD_EXIST, doctorId)));
 
+        if (isWeekend(date)) {
+            throw new BaseException(new ErrorMessage(
+                    MessageType.INVALID_INPUT, "Doktor haftasonları çalışmıyor."));
+        }
         List<LocalTime> availableTimes = getAvailableTimes(doctor, date);
+
 
         DtoDoctorAvailability dto = new DtoDoctorAvailability();
         dto.setAvailableDate(date);
@@ -68,6 +74,10 @@ public class DoctorAvailabilityServiceImpl implements IDoctorAvailabilityService
 
     private boolean isSlotAvailable(Doctors doctor, LocalDate date, LocalTime time) {
         return !appointmentRepository.existsByDoctorAndAppointmentDateAndAppointmentTime(doctor, date, time);
+    }
+    private boolean isWeekend(LocalDate date) {
+        DayOfWeek dayOfWeek = date.getDayOfWeek();
+        return dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY;
     }
 
 }

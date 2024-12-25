@@ -64,6 +64,7 @@ public class FavoriteDoctorsServiceImpl implements IFavoriteDoctorsService {
                 dto.setSurname(doctor.getSurname());
                 dto.setBranch(doctor.getBranch());
                 dto.setCity(doctor.getCity());
+                dto.setTc(doctor.getTc());
                 dto.setAvgPoint(doctor.getAvgPoint());
                 dto.setEmail(doctor.getEmail());
                 return dto;
