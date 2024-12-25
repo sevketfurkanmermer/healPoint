@@ -38,6 +38,4 @@ public class Doctors extends User {
     private List<Appointments> appointments;
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reviews> reviews;
-    @OneToOne(mappedBy = "doctor")
-    private DoctorAvailability availability;
 }
