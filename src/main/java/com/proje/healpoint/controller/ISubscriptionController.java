@@ -7,4 +7,5 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface ISubscriptionController {
     //public ResponseEntity<DtoSubscription> startSubscription(DtoSubscription dtoSubscription);
     public ResponseEntity<DtoSubscription> manageSubscription(Long planId);
+    public ResponseEntity<DtoSubscription> getDoctorSubscription();
 }

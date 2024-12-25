@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 @Service
@@ -74,6 +75,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
         Subscription subscription = doctor.getSubscription();
 
         if (subscription == null) {
+            // Yeni abonelik oluştur
             subscription = new Subscription();
             subscription.setDoctor(doctor);
             subscription.setPlan(plan);
@@ -81,12 +83,23 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
             subscription.setEndDate(LocalDate.now().plusMonths(plan.getDurationInMonths()));
             subscription.setIsActive(true);
         } else {
-            if (subscription.getEndDate().isBefore(LocalDate.now())) {
-                // Abonelik süresi geçmişse bugünün tarihinden itibaren başlat
+            // Mevcut aboneliğin bitiş tarihine 15 günden fazla varsa yeni abonelik alınamaz
+            long daysUntilEnd = ChronoUnit.DAYS.between(LocalDate.now(), subscription.getEndDate());
+            if (daysUntilEnd > 15) {
+                throw new BaseException(new ErrorMessage(MessageType.INVALID_INPUT, "Bitiş tarihine 15 günden fazla varken yeni abonelik alamazsınız."));
+            }
+
+            if (!subscription.getPlan().getId().equals(planId)) {
+                // Farklı bir plana geçiş yapılıyorsa plan bilgilerini güncelle
+                subscription.setPlan(plan);
+                subscription.setStartDate(LocalDate.now());
+                subscription.setEndDate(LocalDate.now().plusMonths(plan.getDurationInMonths()));
+            } else if (subscription.getEndDate().isBefore(LocalDate.now())) {
+                // Mevcut plan süresi geçmişse yeniden başlat
                 subscription.setStartDate(LocalDate.now());
                 subscription.setEndDate(LocalDate.now().plusMonths(plan.getDurationInMonths()));
             } else {
-                // Abonelik aktifse mevcut bitiş tarihine süre ekle
+                // Mevcut plan süresi aktifse bitiş tarihini uzat
                 subscription.setEndDate(subscription.getEndDate().plusMonths(plan.getDurationInMonths()));
             }
             subscription.setIsActive(true);
@@ -97,6 +110,7 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
 
         doctorRepository.save(doctor);
 
+        // DTO'ya dönüştür
         DtoSubscription response = new DtoSubscription();
         response.setPlanId(subscription.getPlan().getId());
         response.setPlanName(subscription.getPlan().getName());
@@ -105,5 +119,24 @@ public class SubscriptionServiceImpl implements ISubscriptionService {
         response.setIsActive(subscription.getIsActive());
 
         return response;
+    }
+
+    @Override
+    public DtoSubscription getDoctorSubscription() {
+        String doctorTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Doctors doctor = doctorRepository.findById(doctorTc)
+                .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Doktor bulunamadı")));
+        Subscription subscription = subscriptionRepository.findByDoctor(doctor)
+                .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Abonelik bulunamadı")));
+
+        DtoSubscription dtoSubscription = new DtoSubscription();
+        dtoSubscription.setId(subscription.getId());
+        dtoSubscription.setPlanId(subscription.getPlan().getId());
+        dtoSubscription.setPlanName(subscription.getPlan().getName());
+        dtoSubscription.setStartDate(subscription.getStartDate());
+        dtoSubscription.setEndDate(subscription.getEndDate());
+        dtoSubscription.setIsActive(subscription.getIsActive());
+
+        return dtoSubscription;
     }
 }

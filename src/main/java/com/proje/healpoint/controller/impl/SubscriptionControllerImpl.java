@@ -5,10 +5,7 @@ import com.proje.healpoint.dto.DtoSubscription;
 import com.proje.healpoint.service.ISubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/api/v1/subscription")
@@ -26,6 +23,13 @@ public class SubscriptionControllerImpl implements ISubscriptionController {
     @PostMapping("/manage")
     public ResponseEntity<DtoSubscription> manageSubscription(@RequestParam Long planId) {
         DtoSubscription subscription = subscriptionService.manageSubscription(planId);
+        return ResponseEntity.ok(subscription);
+    }
+
+    @GetMapping("/list")
+    @Override
+    public ResponseEntity<DtoSubscription> getDoctorSubscription() {
+        DtoSubscription subscription = subscriptionService.getDoctorSubscription();
         return ResponseEntity.ok(subscription);
     }
 }

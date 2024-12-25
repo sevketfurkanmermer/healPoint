@@ -6,4 +6,5 @@ import com.proje.healpoint.model.Subscription;
 public interface ISubscriptionService {
     //public DtoSubscription startSubscription(DtoSubscription dtoSubscription);
     public DtoSubscription manageSubscription(Long planId);
+    public DtoSubscription getDoctorSubscription();
 }
