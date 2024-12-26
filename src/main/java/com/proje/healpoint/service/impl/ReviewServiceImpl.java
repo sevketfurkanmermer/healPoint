@@ -151,7 +151,7 @@ public class ReviewServiceImpl implements IReviewService {
             dtoAppointment.setDtoPatientReview(dtoPatient);
 
             dtoReview.setAppointment(dtoAppointment);
-
+            dtoReview.setPatient(dtoPatient);
             dtoReviews.add(dtoReview);
         }
 
