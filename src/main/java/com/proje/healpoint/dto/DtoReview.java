@@ -1,5 +1,6 @@
 package com.proje.healpoint.dto;
 
+import com.proje.healpoint.model.Patients;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,4 +18,5 @@ public class DtoReview {
     private int points;
     private DtoAppointmentReview appointment;
     private LocalDateTime created_at;
+    private DtoPatientReview patient;
 }
