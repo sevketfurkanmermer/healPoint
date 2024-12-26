@@ -28,6 +28,7 @@ public class SecurityConfig {
     private static final String LOGIN = "api/v1/login";
     private static final String LOGIN_DOCTOR = "api/v1/login-doctor";
     private static final String LIST_DOCTORS = "/api/v1/doctors/list";
+    private static final String LIST_DOCTORS_REVIEWS = "/api/v1/review/list-doctor/{doctorTc}";
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
@@ -36,7 +37,8 @@ public class SecurityConfig {
                                 REGISTER_DOCTOR,
                                 LOGIN,
                                 LOGIN_DOCTOR,
-                                LIST_DOCTORS)
+                                LIST_DOCTORS,
+                                LIST_DOCTORS_REVIEWS)
                         .permitAll()
                         .anyRequest()
                         .authenticated())

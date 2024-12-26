@@ -118,8 +118,7 @@ public class ReviewServiceImpl implements IReviewService {
     }
 
     @Override
-    public List<DtoReview> getDoctorReviews() {
-        String doctorTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public List<DtoReview> getDoctorReviews(String doctorTc) {
 
         Doctors doctor = doctorRepository.findById(doctorTc)
                 .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Doktor bulunamadı")));

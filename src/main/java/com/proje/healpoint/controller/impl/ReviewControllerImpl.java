@@ -21,10 +21,10 @@ public class ReviewControllerImpl implements IReviewController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/list-doctor")
+    @GetMapping("/list-doctor/{doctorTc}")
     @Override
-    public ResponseEntity<List<DtoReview>> getDoctorReviews() {
-        List<DtoReview> reviews = reviewService.getDoctorReviews();
+    public ResponseEntity<List<DtoReview>> getDoctorReviews(@PathVariable(name = "doctorTc") String doctorTc) {
+        List<DtoReview> reviews = reviewService.getDoctorReviews(doctorTc);
         return ResponseEntity.ok(reviews);
     }
 
