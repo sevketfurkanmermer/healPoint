@@ -10,9 +10,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DtoDoctorsFav {
+    private String tc;
     private String name;
     private String surname;
-    private String tc;
     private String branch;
     private String city;
     private double avgPoint;
