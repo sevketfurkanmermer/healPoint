@@ -16,7 +16,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DtoAppointmentReview {
-    private Long Appointment_id;
+    private Long appointmentId;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate Appointment_date;
