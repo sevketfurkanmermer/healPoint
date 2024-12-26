@@ -36,16 +36,14 @@ public class ReviewServiceImpl implements IReviewService {
     private DoctorRepository doctorRepository;
     @Autowired
     private PatientRepository patientRepository;
+    
     @Override
     public DtoReview createReview(DtoReview dtoReview) {
-        // Token'dan hasta TC'sini çek
         String patientTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-
-        // Randevu kontrolü
-        Optional<Appointments> optionalAppointment = appointmentRepository.findById(dtoReview.getAppointment().getAppointment_id());
+        Optional<Appointments> optionalAppointment = appointmentRepository.findById(dtoReview.getAppointment().getAppointmentId());
         if (optionalAppointment.isEmpty()) {
-            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Randevu ID: " + dtoReview.getAppointment().getAppointment_id()));
+            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Randevu ID: " + dtoReview.getAppointment().getAppointmentId()));
         }
         Appointments appointment = optionalAppointment.get();
 
@@ -59,7 +57,7 @@ public class ReviewServiceImpl implements IReviewService {
         }
 
         if (!appointment.getAppointmentStatus().equals(AppointmentStatus.TAMAMLANDI)) {
-            throw new BaseException(new ErrorMessage(MessageType.NOT_COMPLETED_APPOINTMENT, "Randevu ID: " + dtoReview.getAppointment().getAppointment_id()));
+            throw new BaseException(new ErrorMessage(MessageType.NOT_COMPLETED_APPOINTMENT, "Randevu ID: " + dtoReview.getAppointment().getAppointmentId()));
         }
 
         Reviews review = new Reviews();
@@ -93,7 +91,7 @@ public class ReviewServiceImpl implements IReviewService {
         response.setPoints(savedReview.getPoints());
 
         DtoAppointmentReview dtoAppointmentReview = new DtoAppointmentReview();
-        dtoAppointmentReview.setAppointment_id(appointment.getAppointmentId());
+        dtoAppointmentReview.setAppointmentId(appointment.getAppointmentId());
         dtoAppointmentReview.setAppointment_date(appointment.getAppointmentDate());
         dtoAppointmentReview.setAppointment_time(appointment.getAppointmentTime());
         dtoAppointmentReview.setAppointment_status(appointment.getAppointmentStatus());
@@ -134,7 +132,7 @@ public class ReviewServiceImpl implements IReviewService {
             BeanUtils.copyProperties(review, dtoReview);
 
             DtoAppointmentReview dtoAppointment = new DtoAppointmentReview();
-            dtoAppointment.setAppointment_id(review.getAppointment().getAppointmentId());
+            dtoAppointment.setAppointmentId(review.getAppointment().getAppointmentId());
             dtoAppointment.setAppointment_date(review.getAppointment().getAppointmentDate());
             dtoAppointment.setAppointment_time(review.getAppointment().getAppointmentTime());
             dtoAppointment.setAppointment_status(review.getAppointment().getAppointmentStatus());
@@ -153,6 +151,7 @@ public class ReviewServiceImpl implements IReviewService {
 
         return dtoReviews;
     }
+    
     @Override
     public List<DtoReview> getPatientReviews() {
         String patientTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -168,7 +167,7 @@ public class ReviewServiceImpl implements IReviewService {
 
             if (review.getAppointment() != null) {
                 DtoAppointmentReview dtoAppointment = new DtoAppointmentReview();
-                dtoAppointment.setAppointment_id(review.getAppointment().getAppointmentId());
+                dtoAppointment.setAppointmentId(review.getAppointment().getAppointmentId());
                 dtoAppointment.setAppointment_date(review.getAppointment().getAppointmentDate());
                 dtoAppointment.setAppointment_time(review.getAppointment().getAppointmentTime());
                 dtoAppointment.setAppointment_status(review.getAppointment().getAppointmentStatus());
