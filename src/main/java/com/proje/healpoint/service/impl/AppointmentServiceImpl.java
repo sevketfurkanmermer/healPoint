@@ -178,6 +178,10 @@ public class AppointmentServiceImpl implements IAppointmentService {
             if (appointment.getPatient() != null) {
                 dto.setPatientTc(appointment.getPatient().getTc());
             }
+
+            if (appointment.getDoctor() != null) {
+                dto.setDoctorTc(appointment.getDoctor().getTc());
+            }
             dtoAppointments.add(dto);
         }
         dtoAppointments.sort(Comparator.comparing(DtoAppointment::getAppointmentDate).thenComparing(DtoAppointment::getAppointmentTime));
