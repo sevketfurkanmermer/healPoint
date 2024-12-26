@@ -14,6 +14,7 @@ import java.util.List;
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctors,String> {
     @Query("SELECT d FROM Doctors d WHERE " +
+            "d.isAccountActive = true AND " +
             "(:city IS NULL OR d.city = :city) AND " +
             "(:district IS NULL OR d.district = :district) AND " +
             "(:branch IS NULL OR d.branch = :branch) AND " +
@@ -22,14 +23,16 @@ public interface DoctorRepository extends JpaRepository<Doctors,String> {
             "a.startTime <= :appointmentTime AND a.endTime > :appointmentTime) AND " +
             "NOT EXISTS (SELECT ap FROM Appointments ap WHERE " +
             "ap.doctor = d AND ap.appointmentDate = :appointmentDate AND " +
-            "ap.appointmentTime = :appointmentTime AND ap.appointmentStatus = 'AKTIF')")
+            "ap.appointmentTime = :appointmentTime AND ap.appointmentStatus = 'AKTIF')"
+    )
     List<Doctors> findAvailableDoctors(
             @Param("city") String city,
             @Param("district") String district,
             @Param("branch") String branch,
             @Param("appointmentDate") LocalDate appointmentDate,
             @Param("appointmentTime") LocalTime appointmentTime,
-            @Param("dayOfWeek") DayOfWeek dayOfWeek);
+            @Param("dayOfWeek") DayOfWeek dayOfWeek
+    );
 
 
 }

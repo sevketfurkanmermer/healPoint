@@ -34,6 +34,8 @@ public class Appointments {
 
     @Enumerated(EnumType.STRING)
     private AppointmentStatus appointmentStatus;
+    @Column(nullable = false)
+    private boolean reminderSent = false;
 
     private String appointmentText;
     @CreationTimestamp
