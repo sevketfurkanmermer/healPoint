@@ -33,6 +33,7 @@ public interface DoctorRepository extends JpaRepository<Doctors,String> {
             @Param("appointmentTime") LocalTime appointmentTime,
             @Param("dayOfWeek") DayOfWeek dayOfWeek
     );
-
+    @Query("SELECT d FROM Doctors d WHERE d.isAccountActive = true")
+    List<Doctors> findAllActiveDoctors();
 
 }

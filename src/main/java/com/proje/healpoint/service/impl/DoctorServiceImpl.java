@@ -38,11 +38,13 @@ public class DoctorServiceImpl implements IDoctorService {
     public List<DtoDoctor> getAllDoctors() {
 
         List<DtoDoctor> dtoDoctorList = new ArrayList<>();
-        for (Doctors doctor : doctorRepository.findAll()) {
+
+        for (Doctors doctor : doctorRepository.findAllActiveDoctors()) {
             DtoDoctor dtoDoctor = new DtoDoctor();
-            BeanUtils.copyProperties(doctor,dtoDoctor);
+            BeanUtils.copyProperties(doctor, dtoDoctor);
             dtoDoctorList.add(dtoDoctor);
         }
+
         return dtoDoctorList;
     }
 
