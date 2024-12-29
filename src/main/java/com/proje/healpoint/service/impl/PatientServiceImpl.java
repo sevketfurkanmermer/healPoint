@@ -94,6 +94,12 @@ public class PatientServiceImpl implements IPatientService {
         if (dtoPatientIU.getGender() != null) {
             existingPatient.setGender(dtoPatientIU.getGender());
         }
+
+        if (dtoPatientIU.getPassword() != null) {
+            String encodedPassword = passwordEncoder.encode(dtoPatientIU.getPassword());
+            existingPatient.setPassword(encodedPassword);
+        }
+
         if (dtoPatientIU.getName() != null) {
             existingPatient.setName(dtoPatientIU.getName());
         }

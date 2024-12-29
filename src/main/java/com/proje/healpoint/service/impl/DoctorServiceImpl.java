@@ -34,6 +34,7 @@ public class DoctorServiceImpl implements IDoctorService {
     private JwtService jwtService;
     @Autowired
     private AvailabilityRepository availabilityRepository;
+
     @Override
     public List<DtoDoctor> getAllDoctors() {
 
@@ -53,7 +54,8 @@ public class DoctorServiceImpl implements IDoctorService {
         String doctorTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         DtoDoctor dtoDoctor = new DtoDoctor();
         Doctors doctor = doctorRepository.findById(doctorTc)
-                .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Doktor bulunamadı")));
+                .orElseThrow(
+                        () -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Doktor bulunamadı")));
         BeanUtils.copyProperties(doctor, dtoDoctor);
         return dtoDoctor;
     }
@@ -61,21 +63,21 @@ public class DoctorServiceImpl implements IDoctorService {
     @Override
     public DtoDoctor getDoctorById(String id) {
         String tc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    
+
         Doctors doctor = doctorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Doctor not found with ID: " + id));
-    
+
         DtoDoctor dtoDoctor = new DtoDoctor();
-    
+
         BeanUtils.copyProperties(doctor, dtoDoctor);
-    
+
         return dtoDoctor;
     }
-    
+
     @Override
     public void deleteDoctorById() {
         String doctorTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<Doctors> optional =  doctorRepository.findById(doctorTc);
+        Optional<Doctors> optional = doctorRepository.findById(doctorTc);
         if (optional.isPresent()) {
             doctorRepository.delete(optional.get());
         }
@@ -95,12 +97,13 @@ public class DoctorServiceImpl implements IDoctorService {
         doctor.setCity(dtoDoctorIU.getCity());
         doctor.setAddress(dtoDoctorIU.getAddress());
         doctor.setDistrict(dtoDoctorIU.getDistrict());
-        String encodedPassword=passwordEncoder.encode(dtoDoctorIU.getPassword());
+        String encodedPassword = passwordEncoder.encode(dtoDoctorIU.getPassword());
         doctor.setPassword(encodedPassword);
         Doctors createdDoctor = doctorRepository.save(doctor);
-        DtoDoctor dtoDoctor=new DtoDoctor();
-        BeanUtils.copyProperties(createdDoctor,dtoDoctor);
-        for (DayOfWeek day : List.of(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY)) {
+        DtoDoctor dtoDoctor = new DtoDoctor();
+        BeanUtils.copyProperties(createdDoctor, dtoDoctor);
+        for (DayOfWeek day : List.of(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY,
+                DayOfWeek.FRIDAY)) {
             Availability availability = new Availability();
             availability.setDoctor(createdDoctor);
             availability.setDayOfWeek(day);
@@ -126,15 +129,17 @@ public class DoctorServiceImpl implements IDoctorService {
             doctor.setSurname(doctorForUpdate.getSurname());
             doctor.setPhoneNumber(doctorForUpdate.getPhoneNumber());
             doctor.setEmail(doctorForUpdate.getEmail());
-            String encodedPassword=passwordEncoder.encode(doctorForUpdate.getPassword());
-            doctor.setPassword(encodedPassword);
+            if (doctorForUpdate.getPassword() != null) {
+                String encodedPassword = passwordEncoder.encode(doctorForUpdate.getPassword());
+                doctor.setPassword(encodedPassword);
+            }
             doctor.setCity(doctorForUpdate.getCity());
             doctor.setDistrict(doctorForUpdate.getDistrict());
             doctor.setAddress(doctorForUpdate.getAddress());
             doctor.setAbout(doctorForUpdate.getAbout());
             doctor.setGender(doctorForUpdate.getGender());
             Doctors updatedDoctor = doctorRepository.save(doctor);
-            BeanUtils.copyProperties(updatedDoctor,dtoDoctor);
+            BeanUtils.copyProperties(updatedDoctor, dtoDoctor);
             return dtoDoctor;
         }
 
@@ -145,9 +150,8 @@ public class DoctorServiceImpl implements IDoctorService {
     public String getDoctorNameFromToken() {
         String doctorTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Doctors doctor = doctorRepository.findById(doctorTc)
-                .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Doktor bulunamadı")));
+                .orElseThrow(
+                        () -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Doktor bulunamadı")));
         return doctor.getName();
     }
 }
-
-
