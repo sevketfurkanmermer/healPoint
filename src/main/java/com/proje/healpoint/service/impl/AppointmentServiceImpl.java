@@ -324,5 +324,27 @@ public class AppointmentServiceImpl implements IAppointmentService {
                 .thenComparing(DtoAppointment::getAppointmentTime));
         return dtoAppointments;
     }
+    @Override
+    public DtoAppointment cancelAppointment(Long appointmentId) {
 
+        String patientTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Appointments appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new BaseException(
+                        new ErrorMessage(MessageType.NO_RECORD_EXIST, "Randevu bulunamadı")));
+
+        if (!appointment.getPatient().getTc().equals(patientTc)) {
+            throw new BaseException(new ErrorMessage(MessageType.UNAUTHORIZED, "Bu randevuyu iptal etme yetkiniz yok"));
+        }
+
+        if (appointment.getAppointmentStatus() == AppointmentStatus.IPTAL) {
+            throw new BaseException(new ErrorMessage(MessageType.INVALID_INPUT, "Randevu zaten iptal edilmiş veya tamamlanmış"));
+        }
+
+        appointment.setAppointmentStatus(AppointmentStatus.IPTAL);
+        Appointments updatedAppointment = appointmentRepository.save(appointment);
+
+
+        return convertToDto(updatedAppointment);
+    }
 }

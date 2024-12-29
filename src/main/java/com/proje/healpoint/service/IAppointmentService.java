@@ -15,4 +15,5 @@ public interface IAppointmentService {
     public List<DtoAppointment> getActiveAppointments();
     public List<DtoAppointment> getDoctorActiveAppointments();
     public List<DtoAppointment> getDoctorCompletedAndCancelledAppointments();
+    public DtoAppointment cancelAppointment(Long appointmentId);
 }

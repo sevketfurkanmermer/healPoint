@@ -49,7 +49,7 @@ public class DoctorAvailabilityServiceImpl implements IDoctorAvailabilityService
 
     public List<LocalTime> getAvailableTimes(Doctors doctor, LocalDate date) {
         LocalTime start = LocalTime.of(9, 0);
-        LocalTime end = LocalTime.of(18, 0);
+        LocalTime end = LocalTime.of(17, 0);
 
         List<LocalTime> availableTimes = new ArrayList<>();
         boolean hasAppointments = appointmentRepository.existsByDoctorAndAppointmentDate(doctor, date);

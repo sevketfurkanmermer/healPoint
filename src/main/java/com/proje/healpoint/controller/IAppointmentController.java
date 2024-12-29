@@ -14,4 +14,5 @@ public interface IAppointmentController {
     public ResponseEntity<List<DtoAppointment>> getActiveAppointments();
     public ResponseEntity<List<DtoAppointment>> getDoctorActiveAppointments();
     public ResponseEntity<List<DtoAppointment>> getDoctorCompletedAndCancelledAppointments();
+    public ResponseEntity<DtoAppointment> cancelAppointment(Long id);
 }

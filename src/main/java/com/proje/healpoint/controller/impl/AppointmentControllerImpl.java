@@ -66,4 +66,10 @@ public class AppointmentControllerImpl implements IAppointmentController {
         List<DtoAppointment> appointments = appointmentService.getDoctorCompletedAndCancelledAppointments();
         return ResponseEntity.ok(appointments);
     }
+    @PutMapping("/cancel/{id}")
+    @Override
+    public ResponseEntity<DtoAppointment> cancelAppointment(@PathVariable Long id) {
+        DtoAppointment updatedAppointment = appointmentService.cancelAppointment(id);
+        return ResponseEntity.ok(updatedAppointment);
+    }
 }
