@@ -108,7 +108,7 @@ public class DoctorServiceImpl implements IDoctorService {
             availability.setDoctor(createdDoctor);
             availability.setDayOfWeek(day);
             availability.setStartTime(LocalTime.of(9, 0));
-            availability.setEndTime(LocalTime.of(16, 0));
+            availability.setEndTime(LocalTime.of(17, 0));
             availabilityRepository.save(availability);
         }
         return dtoDoctor;
