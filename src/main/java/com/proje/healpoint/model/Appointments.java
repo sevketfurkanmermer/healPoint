@@ -15,9 +15,7 @@ import java.time.LocalTime;
 import java.util.Date;
 
 @Entity
-@Table(name = "Appointments", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"doctor_tc", "appointment_date", "appointment_time"})
-})
+@Table(name = "Appointments")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

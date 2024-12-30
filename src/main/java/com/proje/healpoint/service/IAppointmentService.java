@@ -1,6 +1,7 @@
 package com.proje.healpoint.service;
 
 import com.proje.healpoint.dto.DtoAppointment;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -16,4 +17,5 @@ public interface IAppointmentService {
     public List<DtoAppointment> getDoctorActiveAppointments();
     public List<DtoAppointment> getDoctorCompletedAndCancelledAppointments();
     public DtoAppointment cancelAppointment(Long appointmentId);
+    public List<DtoAppointment> cancelAppointmentForDoctor(Long appointmentId);
 }

@@ -18,9 +18,12 @@ import java.util.List;
 
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointments, Long> {
-        boolean existsByDoctor_TcAndAppointmentDateAndAppointmentTime(String doctorTc, LocalDate appointmentDate,
-                        LocalTime appointmentTime);
-
+        boolean existsByDoctorAndAppointmentDateAndAppointmentTimeAndAppointmentStatus(
+                Doctors doctor,
+                LocalDate appointmentDate,
+                LocalTime appointmentTime,
+                AppointmentStatus appointmentStatus
+        );
         List<Appointments> findByPatient_TcAndAppointmentStatus(String patientTc, AppointmentStatus status);
 
         boolean existsByDoctorAndAppointmentDate(Doctors doctor, LocalDate appointmentDate);
@@ -38,5 +41,6 @@ public interface AppointmentRepository extends JpaRepository<Appointments, Long>
         List<Appointments> findByDoctorAndAppointmentStatusOrderByAppointmentDateAscAppointmentTimeAsc(Doctors doctor, AppointmentStatus status);
         List<Appointments> findByDoctorAndAppointmentStatusIn(Doctors doctor, List<AppointmentStatus> statuses);
         List<Appointments> findByAppointmentDateAndReminderSentFalse(LocalDate appointmentDate);
+
 }
 

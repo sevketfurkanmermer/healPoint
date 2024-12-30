@@ -16,6 +16,7 @@ import com.proje.healpoint.repository.PatientRepository;
 import com.proje.healpoint.service.IAppointmentService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -59,7 +60,7 @@ public class AppointmentServiceImpl implements IAppointmentService {
         if (!errorMessages.isEmpty()) {
             throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, String.join(" - ", errorMessages)));
         }
-
+        Doctors doctor = doctors.get();
         LocalDate appointmentDate = dtoAppointment.getAppointmentDate();
         LocalTime appointmentTime = dtoAppointment.getAppointmentTime();
         LocalDateTime appointmentDateTime = LocalDateTime.of(appointmentDate, appointmentTime);
@@ -69,10 +70,12 @@ public class AppointmentServiceImpl implements IAppointmentService {
                     new ErrorMessage(MessageType.INVALID_INPUT, "Geçmiş tarih ve saate randevu alınamaz."));
         }
 
-        boolean isAlreadyBooked = appointmentRepository.existsByDoctor_TcAndAppointmentDateAndAppointmentTime(
-                dtoAppointment.getDoctorTc(),
+        boolean isAlreadyBooked = appointmentRepository.existsByDoctorAndAppointmentDateAndAppointmentTimeAndAppointmentStatus(
+                doctor,
                 dtoAppointment.getAppointmentDate(),
-                dtoAppointment.getAppointmentTime());
+                dtoAppointment.getAppointmentTime(),
+                AppointmentStatus.AKTIF
+        );
 
         if (isAlreadyBooked) {
             throw new BaseException(
@@ -347,4 +350,55 @@ public class AppointmentServiceImpl implements IAppointmentService {
 
         return convertToDto(updatedAppointment);
     }
+    @Override
+    public List<DtoAppointment> cancelAppointmentForDoctor(Long appointmentId) {
+        String doctorTc = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        // Doktoru doğrula
+        Doctors doctor = doctorRepository.findById(doctorTc)
+                .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Doktor bulunamadı")));
+
+        // Randevuyu doğrula
+        Appointments appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Randevu bulunamadı")));
+
+        // Doktorun bu randevuya erişimi olup olmadığını kontrol et
+        if (!appointment.getDoctor().getTc().equals(doctor.getTc())) {
+            throw new BaseException(new ErrorMessage(MessageType.UNAUTHORIZED, "Bu randevuyu iptal etme yetkiniz yok."));
+        }
+
+        // Randevunun durumunu "İPTAL" olarak güncelle
+        appointment.setAppointmentStatus(AppointmentStatus.IPTAL);
+        appointmentRepository.save(appointment);
+
+        // Doktorun güncel aktif randevularını getir
+        List<Appointments> activeAppointments = appointmentRepository.findByDoctorAndAppointmentStatusOrderByAppointmentDateAscAppointmentTimeAsc(doctor, AppointmentStatus.AKTIF);
+
+        // DTO'ya dönüştür
+        return convertToDtoList(activeAppointments);
+    }
+    private List<DtoAppointment> convertToDtoList(List<Appointments> appointments) {
+        List<DtoAppointment> dtoAppointments = new ArrayList<>();
+        for (Appointments appointment : appointments) {
+            DtoAppointment dto = new DtoAppointment();
+            BeanUtils.copyProperties(appointment, dto);
+
+            if (appointment.getDoctor() != null) {
+                DtoDoctorReview dtoDoctor = new DtoDoctorReview();
+                BeanUtils.copyProperties(appointment.getDoctor(), dtoDoctor);
+                dto.setDoctor(dtoDoctor);
+            }
+
+            if (appointment.getPatient() != null) {
+                DtoPatientReview dtoPatient = new DtoPatientReview();
+                BeanUtils.copyProperties(appointment.getPatient(), dtoPatient);
+                dto.setPatient(dtoPatient);
+            }
+
+            dtoAppointments.add(dto);
+        }
+        return dtoAppointments;
+    }
+
+
 }
